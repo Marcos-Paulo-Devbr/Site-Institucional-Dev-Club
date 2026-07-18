@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevClub — Vire programador. De verdade.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>devclub</div>
+    <div class="navlinks">
+      <a href="#formacao">Formação</a>
+      <a href="#time">Quem ensina</a>
+      <a href="#alunos">Alunos</a>
+      <a href="#empresas">Empresas</a>
+    </div>
+    <a href="#cta" class="nav-cta">$ quero_vaga</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap" style="display:grid; grid-template-columns:1.1fr .9fr; gap:56px; align-items:center;">
+    <div>
+      <div class="eyebrow">FORMAÇÃO FULL STACK · 100% ONLINE</div>
+      <h1 class="headline">Você não nasceu programador.<br>Você <span class="accent">decidiu</span> virar um.</h1>
+      <p class="sub">O DevClub pega gente comum — de qualquer profissão, qualquer idade, qualquer cidade — e transforma em desenvolvedor full stack contratável. Sem enrolação, sem teoria inútil, sem 5 anos de faculdade.</p>
+      <div class="hero-ctas">
+        <a href="#cta" class="btn-primary">Começar minha transformação →</a>
+        <a href="#formacao" class="btn-ghost">Ver a formação</a>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span style="background:#FF5F57;"></span><span style="background:#FEBC2E;"></span><span style="background:#28C840;"></span>
+        <div class="title">carreira.transform()</div>
+      </div>
+      <div class="terminal-body" id="termBody"></div>
+    </div>
+  </div>
+</header>
+
+<section class="stats" style="padding:0;">
+  <div class="wrap">
+    <div class="stat"><div class="stat-num">12.400<span class="u">+</span></div><div class="stat-label">alunos formados</div></div>
+    <div class="stat"><div class="stat-num">4,2<span class="u">meses</span></div><div class="stat-label">tempo médio até o 1º emprego</div></div>
+    <div class="stat"><div class="stat-num">89<span class="u">%</span></div><div class="stat-label">concluem a formação</div></div>
+    <div class="stat"><div class="stat-num">310<span class="u">+</span></div><div class="stat-label">empresas parceiras de vagas</div></div>
+  </div>
+</section>
+
+<section id="formacao">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">O que você aprende</span>
+      <h2>Do zero absoluto até deploy em produção.</h2>
+      <p class="section-sub">Uma trilha prática: cada módulo termina com um projeto real pro seu portfólio, não com um quiz.</p>
+    </div>
+    <div class="stack-grid reveal">
+      <div class="stack-card"><div class="stack-tag">MÓDULO 01</div><div class="stack-name">HTML &amp; CSS</div><div class="stack-desc">Estrutura e estilo de verdade — layouts responsivos que não quebram no celular do seu tio.</div></div>
+      <div class="stack-card"><div class="stack-tag">MÓDULO 02</div><div class="stack-name">JavaScript</div><div class="stack-desc">Lógica, DOM e a base que separa quem só copia código de quem entende o que escreveu.</div></div>
+      <div class="stack-card"><div class="stack-tag">MÓDULO 03</div><div class="stack-name">React</div><div class="stack-desc">Interfaces que escalam. Componentização, estado e os padrões que o mercado cobra.</div></div>
+      <div class="stack-card"><div class="stack-tag">MÓDULO 04</div><div class="stack-name">Node.js</div><div class="stack-desc">Back-end, APIs e banco de dados — pra você entregar sistema completo, não só tela.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="time">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Quem te ensina</span>
+      <h2>Gente que trabalha com isso todo dia — não professor de apostila.</h2>
+    </div>
+    <div class="tutors reveal">
+      <div class="tutor-card">
+        <div class="tutor-avatar">RM</div>
+        <div class="tutor-name">Rodolfo Mori</div>
+        <div class="tutor-role">Fundador &amp; instrutor principal</div>
+        <div class="tutor-bio">Construiu a carreira em programação do zero e hoje lidera o time que constrói os próprios sistemas do DevClub — a mesma stack que você vai aprender.</div>
+      </div>
+      <div class="tutor-card">
+        <div class="tutor-avatar">AM</div>
+        <div class="tutor-name">Andrey Maia</div>
+        <div class="tutor-role">Head de suporte técnico</div>
+        <div class="tutor-bio">Responde dúvida de aluno de manhã e sobe deploy à tarde. Cuida pra ninguém travar sozinho numa tela vermelha de erro.</div>
+      </div>
+      <div class="tutor-card">
+        <div class="tutor-avatar">GB</div>
+        <div class="tutor-name">George &amp; Gabriel</div>
+        <div class="tutor-role">Squad de produto</div>
+        <div class="tutor-bio">O time que constrói a plataforma que você está usando agora — prova viva de que o que se ensina aqui dentro é o que se usa aqui dentro.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="alunos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Quem já era você</span>
+      <h2>De outras profissões pra linha de código.</h2>
+      <p class="section-sub">Sem experiência prévia em tecnologia. Sem atalho — só trabalho.</p>
+    </div>
+    <div class="transform-list reveal">
+      <div class="transform-row">
+        <div class="t-before">ex-atendente de loja</div>
+        <div class="t-arrow">→</div>
+        <div class="t-after">Camila R., Dev Front-end Jr.</div>
+        <div class="t-quote">"Estudava depois do fechamento do shopping. 5 meses depois, primeira CLT em tech."</div>
+      </div>
+      <div class="transform-row">
+        <div class="t-before">ex-motorista de app</div>
+        <div class="t-arrow">→</div>
+        <div class="t-after">Bruno T., Dev Full Stack</div>
+        <div class="t-quote">"Trocava corrida por commit. Hoje trabalho 100% remoto, de onde eu quiser."</div>
+      </div>
+      <div class="transform-row">
+        <div class="t-before">ex-professora de artes</div>
+        <div class="t-arrow">→</div>
+        <div class="t-after">Larissa F., Dev Back-end</div>
+        <div class="t-quote">"Achei que era tarde pra mudar de área aos 34. Não era."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="empresas">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Quem contrata</span>
+      <h2>As empresas que já sabem o que um aluno DevClub entrega.</h2>
+    </div>
+    <div class="logo-wall reveal">
+      <div class="logo-chip">Nortex Sistemas</div>
+      <div class="logo-chip">Vaza Tech</div>
+      <div class="logo-chip">Cubo Software</div>
+      <div class="logo-chip">Plano B Digital</div>
+      <div class="logo-chip">Rotamais</div>
+      <div class="logo-chip">Bytebank</div>
+      <div class="logo-chip">Firma.io</div>
+      <div class="logo-chip">Solventa</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final" id="cta">
+  <div class="wrap">
+    <span class="kicker" style="justify-content:center; display:flex;">Sua vez</span>
+    <h2>Sua carreira também pode virar um "git commit -m 'nova profissão'".</h2>
+    <p class="sub2">As inscrições abrem em breve. Entra na lista e seja avisado antes de todo mundo.</p>
+    <a href="#" class="btn-primary">Quero ser avisado →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>devclub</div>
+    <div class="f-mono">© 2026 DevClub · página conceito, dados fictícios</div>
+  </div>
+</footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>
