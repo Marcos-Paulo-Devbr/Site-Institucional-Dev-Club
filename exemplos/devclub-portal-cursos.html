@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal de Cursos Premium — DevClub</title>
+<style>
+  :root{
+    --bg: #0b0d12;
+    --bg-raised: #12151c;
+    --bg-card: #14171f;
+    --line: #232833;
+    --line-soft: #1b1f28;
+    --text: #f2f4f7;
+    --text-dim: #9aa3b2;
+    --text-faint: #5b6373;
+    --accent: #3b82f6;
+    --code-bg: #1e1e1e;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); font-family: 'Inter', sans-serif; cursor: none; overflow-x: hidden; }
+  .mono{ font-family: 'JetBrains Mono', monospace; }
+  .wrap{ max-width:920px; margin:0 auto; padding: 0 24px; }
+
+  /* CURSOR */
+  #cursor-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
+  #cursor-ring { width: 32px; height: 32px; border: 1.5px solid rgba(59,130,246,0.5); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: all 0.2s ease; }
+
+  /* HERO */
+  .hero{ padding:80px 0 40px; text-align: center; }
+  .eyebrow{ font-size:12px; color:var(--accent); background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.25); padding:5px 12px; border-radius:6px; display: inline-block; margin-bottom: 24px; }
+  h1{ font-size:48px; font-weight:800; margin:0 0 20px; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .lede{ font-size:18px; color:var(--text-dim); max-width:600px; margin:0 auto 40px; line-height:1.6; }
+  
+  .preview-img{ width: 100%; border-radius: 16px; border: 1px solid var(--line); box-shadow: 0 30px 60px rgba(0,0,0,0.5); margin-top: 40px; transition: transform 0.5s ease; }
+  .preview-img:hover{ transform: scale(1.02) translateY(-10px); }
+
+  /* PROCESSO */
+  .process-section{ padding: 100px 0; }
+  .process-grid{ display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; }
+  .code-window{ background: var(--code-bg); border-radius: 12px; border: 1px solid var(--line); overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+  .code-header{ background: #2d2d2d; padding: 12px; display: flex; gap: 8px; }
+  .code-dot{ width: 10px; height: 10px; border-radius: 50%; }
+  .code-body{ padding: 24px; font-size: 13px; line-height: 1.6; color: #d4d4d4; min-height: 200px; }
+  
+  .step-item{ padding: 24px; border-radius: 12px; border: 1px solid transparent; transition: all 0.3s ease; opacity: 0.4; }
+  .step-item.active{ opacity: 1; background: var(--bg-card); border-color: var(--line-soft); }
+  .step-num{ font-size: 12px; color: var(--accent); font-weight: 800; margin-bottom: 8px; display: block; }
+  .step-item h3{ margin: 0 0 8px; font-size: 18px; }
+  .step-item p{ margin: 0; font-size: 14px; color: var(--text-dim); }
+
+  .btn{ display: inline-flex; align-items: center; padding: 14px 28px; background: var(--accent); color: #fff; font-weight: 700; border-radius: 8px; transition: all 0.2s ease; }
+  .btn:hover{ transform: translateY(-2px); box-shadow: 0 10px 20px rgba(59,130,246,0.3); }
+
+  .reveal{ opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+  .reveal.visible{ opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+<div id="cursor-dot"></div><div id="cursor-ring"></div>
+
+<div class="wrap">
+  <section class="hero reveal">
+    <span class="eyebrow mono">PROJETO 05 · FULL STACK</span>
+    <h1>Portal de Cursos e Área de Alunos</h1>
+    <p class="lede">Crie sua própria plataforma de ensino. Aprenda a gerenciar conteúdos em vídeo, acompanhamento de progresso e entrega de materiais exclusivos.</p>
+    <a href="#" class="btn">Criar este projeto →</a>
+    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663848180033/mNzvTJjAkBYxBKSN.png" class="preview-img" alt="Mockup Portal de Cursos">
+  </section>
+
+  <section class="process-section">
+    <div class="process-grid">
+      <div class="code-window reveal">
+        <div class="code-header">
+          <div class="code-dot" style="background:#ff5f57"></div>
+          <div class="code-dot" style="background:#febc2e"></div>
+          <div class="code-dot" style="background:#28c840"></div>
+        </div>
+        <div class="code-body mono" id="codeContent">
+          // 1. Player de Vídeo Dinâmico<br>
+          function playLesson(lessonId) {<br>
+          &nbsp;&nbsp;const lesson = getLesson(lessonId);<br>
+          &nbsp;&nbsp;videoPlayer.src = lesson.videoUrl;<br>
+          &nbsp;&nbsp;updateSidebar(lessonId);<br>
+          }
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step-item reveal active" data-step="1">
+          <span class="step-num mono">PASSO 01</span>
+          <h3>Gestão de Conteúdo</h3>
+          <p>Estruturamos a exibição de aulas e módulos, garantindo uma navegação fluida entre os conteúdos.</p>
+        </div>
+        <div class="step-item reveal" data-step="2">
+          <span class="step-num mono">PASSO 02</span>
+          <h3>Controle de Progresso</h3>
+          <p>Implementamos a lógica que marca aulas como concluídas e calcula a porcentagem total do curso.</p>
+        </div>
+        <div class="step-item reveal" data-step="3">
+          <span class="step-num mono">PASSO 03</span>
+          <h3>Materiais e Downloads</h3>
+          <p>Criamos o sistema de anexos e materiais de apoio vinculados a cada aula específica.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx+'px'; dot.style.top = my+'px'; });
+function anim() { rx += (mx-rx)*0.1; ry += (my-ry)*0.1; ring.style.left = rx+'px'; ring.style.top = ry+'px'; requestAnimationFrame(anim); }
+anim();
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      if(entry.target.classList.contains('step-item')) updateCode(entry.target.dataset.step);
+    }
+  });
+}, { threshold: 0.6 });
+document.querySelectorAll('.reveal, .step-item').forEach(el => observer.observe(el));
+
+function updateCode(step) {
+  const code = document.getElementById('codeContent');
+  document.querySelectorAll('.step-item').forEach(s => s.classList.remove('active'));
+  document.querySelector(`[data-step="${step}"]`).classList.add('active');
+  if(step === "1") code.innerHTML = "// 1. Player de Vídeo Dinâmico<br>function playLesson(lessonId) {<br>&nbsp;&nbsp;const lesson = getLesson(lessonId);<br>&nbsp;&nbsp;videoPlayer.src = lesson.videoUrl;<br>&nbsp;&nbsp;updateSidebar(lessonId);<br>}";
+  else if(step === "2") code.innerHTML = "// 2. Progresso do Aluno<br>function markAsDone(lessonId) {<br>&nbsp;&nbsp;userProgress.completed.push(lessonId);<br>&nbsp;&nbsp;const percent = (completed.length / total) * 100;<br>&nbsp;&nbsp;updateProgressBar(percent);<br>}";
+  else if(step === "3") code.innerHTML = "// 3. Gestão de Materiais<br>function downloadResource(lessonId) {<br>&nbsp;&nbsp;const files = getResources(lessonId);<br>&nbsp;&nbsp;files.forEach(f => window.open(f.url));<br>}";
+}
+</script>
+</body>
+</html>

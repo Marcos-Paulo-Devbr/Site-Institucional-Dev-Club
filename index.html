@@ -3,24 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DevClub — Vire programador. De verdade.</title>
+
+<!-- SEO básico -->
+<title>DevClub</title>
+<meta name="description" content="O DevClub transforma gente comum em desenvolvedores full stack contratáveis. Metodologia prática, projetos reais e comunidade ativa — do zero ao primeiro emprego em tecnologia.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.devclub.com.br/">
+
+<!-- Open Graph / compartilhamento social -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="DevClub — Formação Full Stack. Vire programador, de verdade.">
+<meta property="og:description" content="Metodologia prática, projetos reais e comunidade ativa — do zero ao primeiro emprego em tecnologia.">
+<meta property="og:locale" content="pt_BR">
+
+<!-- Favicon (SVG inline — troque por um arquivo .ico/.png real quando tiver a arte final) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230B0E14'/%3E%3Cg fill='%235EEAD4'%3E%3Crect x='6' y='6' width='6' height='6'/%3E%3Crect x='20' y='6' width='6' height='6'/%3E%3Crect x='13' y='13' width='6' height='6'/%3E%3Crect x='6' y='20' width='6' height='6'/%3E%3C/g%3E%3Crect x='20' y='20' width='6' height='6' fill='%23FFB627'/%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<div class="grid-bg"></div>
+<canvas id="bg-canvas"></canvas>
 
 <nav>
   <div class="wrap">
-    <div class="logo"><span class="dot"></span>devclub</div>
+    <div class="logo"><span class="dot"></span>DevClub</div>
     <div class="navlinks">
+      <a href="#quem-somos">Quem somos</a>
       <a href="#formacao">Formação</a>
-      <a href="#time">Quem ensina</a>
+      <a href="#time">Equipe</a>
       <a href="#alunos">Alunos</a>
-      <a href="#empresas">Empresas</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contato">Contato</a>
     </div>
     <a href="#cta" class="nav-cta">$ quero_vaga</a>
   </div>
@@ -56,6 +72,32 @@
   </div>
 </section>
 
+<!-- ===== QUEM SOMOS ===== -->
+<section id="quem-somos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Quem somos</span>
+      <h2>Uma escola feita pra tirar gente do zero e colocar no mercado.</h2>
+      <p class="section-sub">O DevClub nasceu de uma ideia simples: ensinar programação do jeito que o mercado realmente cobra — prático, direto, sem enrolação acadêmica.</p>
+    </div>
+    <div class="mission-grid reveal">
+      <div class="mission-card">
+        <div class="mission-tag">Missão</div>
+        <p>Formar desenvolvedores prontos pro mercado real, não pra prova de faculdade — não importa de onde a pessoa esteja partindo.</p>
+      </div>
+      <div class="mission-card">
+        <div class="mission-tag">Método</div>
+        <p>Aprender fazendo. Cada módulo entrega um projeto real, versionado, publicado — o portfólio se constrói junto com o curso.</p>
+      </div>
+      <div class="mission-card">
+        <div class="mission-tag">Comunidade</div>
+        <p>Ninguém programa sozinho aqui. Mentoria, colegas de turma e um ambiente que puxa todo mundo pra frente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== O QUE OFERECE ===== -->
 <section id="formacao">
   <div class="wrap">
     <div class="section-head reveal">
@@ -63,16 +105,93 @@
       <h2>Do zero absoluto até deploy em produção.</h2>
       <p class="section-sub">Uma trilha prática: cada módulo termina com um projeto real pro seu portfólio, não com um quiz.</p>
     </div>
-    <div class="stack-grid reveal">
-      <div class="stack-card"><div class="stack-tag">MÓDULO 01</div><div class="stack-name">HTML &amp; CSS</div><div class="stack-desc">Estrutura e estilo de verdade — layouts responsivos que não quebram no celular do seu tio.</div></div>
-      <div class="stack-card"><div class="stack-tag">MÓDULO 02</div><div class="stack-name">JavaScript</div><div class="stack-desc">Lógica, DOM e a base que separa quem só copia código de quem entende o que escreveu.</div></div>
-      <div class="stack-card"><div class="stack-tag">MÓDULO 03</div><div class="stack-name">React</div><div class="stack-desc">Interfaces que escalam. Componentização, estado e os padrões que o mercado cobra.</div></div>
-      <div class="stack-card"><div class="stack-tag">MÓDULO 04</div><div class="stack-name">Node.js</div><div class="stack-desc">Back-end, APIs e banco de dados — pra você entregar sistema completo, não só tela.</div></div>
+    <div class="stack-carousel reveal" aria-label="Módulos da formação">
+      <div class="stack-track" id="stackTrack" tabindex="0">
+        <article class="stack-card module-card module-card--html"><div class="module-icon" aria-hidden="true">&lt;/&gt;</div><div class="stack-tag">MÓDULO 01</div><h3 class="stack-name">HTML &amp; CSS</h3><p class="stack-desc">Estrutura e estilo de verdade — layouts responsivos que não quebram no celular do seu tio.</p></article>
+        <article class="stack-card module-card module-card--js"><div class="module-icon" aria-hidden="true">JS</div><div class="stack-tag">MÓDULO 02</div><h3 class="stack-name">JavaScript</h3><p class="stack-desc">Lógica, DOM e a base que separa quem só copia código de quem entende o que escreveu.</p></article>
+        <article class="stack-card module-card module-card--react"><div class="module-icon" aria-hidden="true">⚛</div><div class="stack-tag">MÓDULO 03</div><h3 class="stack-name">React</h3><p class="stack-desc">Interfaces que escalam. Componentização, estado e os padrões que o mercado cobra.</p></article>
+        <article class="stack-card module-card module-card--node"><div class="module-icon" aria-hidden="true">⬢</div><div class="stack-tag">MÓDULO 04</div><h3 class="stack-name">Node.js</h3><p class="stack-desc">Back-end, APIs e banco de dados — pra você entregar sistema completo, não só tela.</p></article>
+        <article class="stack-card module-card module-card--data"><div class="module-icon" aria-hidden="true">▤</div><div class="stack-tag">MÓDULO 05</div><h3 class="stack-name">Banco de Dados</h3><p class="stack-desc">Modelagem, SQL e dados organizados para aplicações rápidas, seguras e prontas para crescer.</p></article>
+        <article class="stack-card module-card module-card--git"><div class="module-icon" aria-hidden="true">⑂</div><div class="stack-tag">MÓDULO 06</div><h3 class="stack-name">Git &amp; GitHub</h3><p class="stack-desc">Versione seu código, trabalhe em equipe e monte um histórico que valoriza seu portfólio.</p></article>
+        <article class="stack-card module-card module-card--api"><div class="module-icon" aria-hidden="true">⇄</div><div class="stack-tag">MÓDULO 07</div><h3 class="stack-name">APIs &amp; Segurança</h3><p class="stack-desc">Integrações, autenticação e boas práticas para criar sistemas confiáveis do início ao fim.</p></article>
+        <article class="stack-card module-card module-card--deploy"><div class="module-icon" aria-hidden="true">↗</div><div class="stack-tag">MÓDULO 08</div><h3 class="stack-name">Deploy &amp; Carreira</h3><p class="stack-desc">Publique seus projetos, organize o portfólio e se prepare para conquistar sua primeira vaga.</p></article>
+      </div>
+      <div class="stack-carousel-footer">
+        <span class="stack-counter" id="stackCounter" aria-live="polite">01 / 08</span>
+        <div class="stack-controls">
+          <button class="stack-arrow" id="stackPrev" type="button" aria-label="Ver módulo anterior">←</button>
+          <button class="stack-arrow" id="stackNext" type="button" aria-label="Ver próximo módulo">→</button>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- ===== PROJETOS QUE VOCÊ PODE CRIAR ===== -->
+<section id="projetos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Na prática</span>
+      <h2>Sites e sistemas que você pode criar.</h2>
+      <p class="section-sub">Use sua formação para tirar ideias do papel e construir projetos completos para o seu portfólio.</p>
+    </div>
+    <div class="stack-carousel reveal" aria-label="Exemplos de projetos que podem ser criados">
+      <div class="stack-track" id="projectsTrack" tabindex="0">
+        <article class="stack-card"><div class="stack-tag">PROJETO 01</div><h3 class="stack-name">Landing page</h3><p class="stack-desc">Uma página de alta conversão para divulgar serviços, cursos ou um produto.</p><a class="project-link" href="./exemplos/devclub-landing-page.html">Ver projeto <span aria-hidden="true">↗</span></a></article>
+        <article class="stack-card"><div class="stack-tag">PROJETO 02</div><h3 class="stack-name">Loja virtual</h3><p class="stack-desc">Catálogo, carrinho e checkout para vender produtos pela internet.</p><a class="project-link" href="./exemplos/devclub-loja-virtual.html">Ver projeto <span aria-hidden="true">↗</span></a></article>
+        <article class="stack-card"><div class="stack-tag">PROJETO 03</div><h3 class="stack-name">Sistema de agendamento</h3><p class="stack-desc">Agenda online para clínicas, salões, consultorias e negócios locais.</p><a class="project-link" href="./exemplos/devclub-sistema-agendamento.html">Ver projeto <span aria-hidden="true">↗</span></a></article>
+        <article class="stack-card"><div class="stack-tag">PROJETO 04</div><h3 class="stack-name">Dashboard financeiro</h3><p class="stack-desc">Painel para acompanhar receitas, despesas e indicadores do negócio.</p><a class="project-link" href="./exemplos/devclub-projeto-dashboard.html">Ver projeto <span aria-hidden="true">↗</span></a></article>
+        <article class="stack-card"><div class="stack-tag">PROJETO 05</div><h3 class="stack-name">Portal de cursos</h3><p class="stack-desc">Área de alunos com aulas, materiais e acompanhamento do progresso.</p><a class="project-link" href="./exemplos/devclub-portal-cursos.html">Ver projeto <span aria-hidden="true">↗</span></a></article>
+        <article class="stack-card"><div class="stack-tag">PROJETO 06</div><h3 class="stack-name">Sistema de pedidos</h3><p class="stack-desc">Pedidos, cardápio digital e gestão simples para restaurantes e delivery.</p><a class="project-link" href="./exemplos/devclub-sistema-pedidos.html">Ver projeto <span aria-hidden="true">↗</span></a></article>
+        <article class="stack-card"><div class="stack-tag">PROJETO 07</div><h3 class="stack-name">Portfólio profissional</h3><p class="stack-desc">Seu espaço na web para apresentar trabalhos, serviços e contatos.</p><a class="project-link" href="./exemplos/devclub-portfolio.html">Criar este projeto <span aria-hidden="true">↗</span></a></article>
+      <div class="stack-carousel-footer">
+        <span class="stack-counter" id="projectsCounter" aria-live="polite">01 / 08</span>
+        <div class="stack-controls">
+          <button class="stack-arrow" id="projectsPrev" type="button" aria-label="Ver projeto anterior">←</button>
+          <button class="stack-arrow" id="projectsNext" type="button" aria-label="Ver próximo projeto">→</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PARA QUEM É ===== -->
+<section id="para-quem">
+  <video class="section-bg-video" autoplay muted loop playsinline aria-hidden="true">
+    <source src="./arquivos/Pippit_20260722_ProgEduBG.mp4" type="video/mp4">
+  </video>
+  <div class="section-video-overlay" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Pra quem é</span>
+      <h2>Não importa de onde você está partindo.</h2>
+    </div>
+    <div class="forwho-grid reveal">
+      <div class="forwho-card">
+        <div class="forwho-icon">↗</div>
+        <h3>Quer começar do zero</h3>
+        <p>Nunca escreveu uma linha de código. Começa pelos fundamentos e evolui passo a passo até estar pronto pro mercado.</p>
+      </div>
+      <div class="forwho-card">
+        <div class="forwho-icon">↗</div>
+        <h3>Quer trocar de área</h3>
+        <p>Já trabalha em outra coisa e quer migrar pra tecnologia sem recomeçar a vida do zero.</p>
+      </div>
+      <div class="forwho-card">
+        <div class="forwho-icon">↗</div>
+        <h3>Quer se especializar</h3>
+        <p>Já programa um pouco e quer uma trilha estruturada pra virar full stack de verdade.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EQUIPE / AUTORIDADE ===== -->
 <section id="time">
+  <video class="team-bg-video" autoplay muted loop playsinline aria-hidden="true">
+    <source src="./arquivos/Pippit_0722_ProgrammingEdu.mp4" type="video/mp4">
+  </video>
+  <div class="team-video-overlay" aria-hidden="true"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <span class="kicker">Quem te ensina</span>
@@ -80,27 +199,64 @@
     </div>
     <div class="tutors reveal">
       <div class="tutor-card">
-        <div class="tutor-avatar">RM</div>
+        <div class="tutor-avatar"><img src="./arquivos/1.png" alt="Rodolfo Mori"></div>
         <div class="tutor-name">Rodolfo Mori</div>
         <div class="tutor-role">Fundador &amp; instrutor principal</div>
         <div class="tutor-bio">Construiu a carreira em programação do zero e hoje lidera o time que constrói os próprios sistemas do DevClub — a mesma stack que você vai aprender.</div>
       </div>
       <div class="tutor-card">
-        <div class="tutor-avatar">AM</div>
+        <div class="tutor-avatar"><img src="./arquivos/2.png" alt="Andrey Maia"></div>
         <div class="tutor-name">Andrey Maia</div>
         <div class="tutor-role">Head de suporte técnico</div>
         <div class="tutor-bio">Responde dúvida de aluno de manhã e sobe deploy à tarde. Cuida pra ninguém travar sozinho numa tela vermelha de erro.</div>
       </div>
       <div class="tutor-card">
-        <div class="tutor-avatar">GB</div>
-        <div class="tutor-name">George &amp; Gabriel</div>
-        <div class="tutor-role">Squad de produto</div>
-        <div class="tutor-bio">O time que constrói a plataforma que você está usando agora — prova viva de que o que se ensina aqui dentro é o que se usa aqui dentro.</div>
+        <div class="tutor-avatar"><img src="./arquivos/3.png" alt="Fernanda Costa"></div>
+        <div class="tutor-name">Fernanda Costa</div>
+        <div class="tutor-role">Mentora de Carreira </div>
+        <div class="tutor-bio">Guio profissionais no direcionamento de suas carreiras, no desenvolvimento de liderança e na conquista de novos objetivos profissionais. Transforme seu potencial em resultados concretos.</div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ===== SALÁRIO / BENEFÍCIOS ===== -->
+<section id="salario">
+  <video class="salary-bg-video" autoplay muted loop playsinline aria-hidden="true">
+    <source src="./arquivos/Pippit_20260722_FuturisticTechBG.mp4" type="video/mp4">
+  </video>
+  <div class="salary-video-overlay" aria-hidden="true"></div>
+  <div class="wrap salary-wrap">
+    <div class="section-head reveal" style="margin-bottom:40px;">
+      <span class="kicker">Por que vale a pena</span>
+      <h2>A média salarial de um dev no Brasil.</h2>
+      <p class="section-sub">*Valores aproximados, variam por empresa, senioridade e região.</p>
+    </div>
+    <div class="salary-grid reveal">
+      <div class="salary-bars">
+        <div class="salary-row">
+          <span class="salary-label">Júnior</span>
+          <div class="salary-bar"><div class="salary-fill" style="width:40%;">R$ 4k – 6k</div></div>
+        </div>
+        <div class="salary-row">
+          <span class="salary-label">Pleno</span>
+          <div class="salary-bar"><div class="salary-fill salary-fill--amber" style="width:68%;">R$ 8k – 12k</div></div>
+        </div>
+        <div class="salary-row">
+          <span class="salary-label">Sênior</span>
+          <div class="salary-bar"><div class="salary-fill salary-fill--cyan" style="width:92%;">R$ 12k+</div></div>
+        </div>
+      </div>
+      <div class="benefit-list">
+        <div class="benefit"><strong>Mercado aquecido</strong><span>Vagas remotas abertas o ano inteiro, em empresas de todos os portes.</span></div>
+        <div class="benefit"><strong>Trabalhe de onde quiser</strong><span>Boa parte das vagas de dev são 100% remotas.</span></div>
+        <div class="benefit"><strong>Moeda estrangeira</strong><span>Projetos internacionais como fonte extra de renda pra quem já está formado.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROVA SOCIAL ===== -->
 <section id="alunos">
   <div class="wrap">
     <div class="section-head reveal">
@@ -112,19 +268,19 @@
       <div class="transform-row">
         <div class="t-before">ex-atendente de loja</div>
         <div class="t-arrow">→</div>
-        <div class="t-after">Camila R., Dev Front-end Jr.</div>
+        <div class="t-after"><span class="student-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;w=160&amp;h=160&amp;q=85" alt="Retrato ilustrativo de Camila" loading="lazy"></span><span>Camila R., Dev Front-end Jr.</span></div>
         <div class="t-quote">"Estudava depois do fechamento do shopping. 5 meses depois, primeira CLT em tech."</div>
       </div>
       <div class="transform-row">
         <div class="t-before">ex-motorista de app</div>
         <div class="t-arrow">→</div>
-        <div class="t-after">Bruno T., Dev Full Stack</div>
+        <div class="t-after"><span class="student-avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&amp;fit=crop&amp;w=160&amp;h=160&amp;q=85" alt="Retrato ilustrativo de Bruno" loading="lazy"></span><span>Bruno T., Dev Full Stack</span></div>
         <div class="t-quote">"Trocava corrida por commit. Hoje trabalho 100% remoto, de onde eu quiser."</div>
       </div>
       <div class="transform-row">
         <div class="t-before">ex-professora de artes</div>
         <div class="t-arrow">→</div>
-        <div class="t-after">Larissa F., Dev Back-end</div>
+        <div class="t-after"><span class="student-avatar"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&amp;fit=crop&amp;w=160&amp;h=160&amp;q=85" alt="Retrato ilustrativo de Larissa" loading="lazy"></span><span>Larissa F., Dev Back-end</span></div>
         <div class="t-quote">"Achei que era tarde pra mudar de área aos 34. Não era."</div>
       </div>
     </div>
@@ -137,15 +293,64 @@
       <span class="kicker">Quem contrata</span>
       <h2>As empresas que já sabem o que um aluno DevClub entrega.</h2>
     </div>
-    <div class="logo-wall reveal">
-      <div class="logo-chip">Nortex Sistemas</div>
-      <div class="logo-chip">Vaza Tech</div>
-      <div class="logo-chip">Cubo Software</div>
-      <div class="logo-chip">Plano B Digital</div>
-      <div class="logo-chip">Rotamais</div>
-      <div class="logo-chip">Bytebank</div>
-      <div class="logo-chip">Firma.io</div>
-      <div class="logo-chip">Solventa</div>
+    <div class="stack-carousel companies-carousel reveal" aria-label="Empresas parceiras">
+      <div class="stack-track" id="companiesTrack" tabindex="0">
+        <article class="stack-card company-card"><img src="./arquivos/nortex.png" alt="Escritório da Nortex Sistemas" loading="lazy"><div class="company-card-label">Nortex Sistemas</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/vaza tech.png" alt="Escritório da Vaza Tech" loading="lazy"><div class="company-card-label">Vaza Tech</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/cubo.png" alt="Escritório da Cubo Software" loading="lazy"><div class="company-card-label">Cubo Software</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/plano b.png" alt="Escritório da Plano B Digital" loading="lazy"><div class="company-card-label">Plano B Digital</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/rotamais.png" alt="Escritório da Rotamais" loading="lazy"><div class="company-card-label">Rotamais</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/bytebank.png" alt="Escritório da Bytebank" loading="lazy"><div class="company-card-label">Bytebank</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/firma.png" alt="Escritório da Firma.io" loading="lazy"><div class="company-card-label">Firma.io</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/solventa.png" alt="Escritório da Solventa" loading="lazy"><div class="company-card-label">Solventa</div></article>
+      </div>
+      <div class="stack-carousel-footer">
+        <span class="stack-counter" id="companiesCounter" aria-live="polite">01 / 08</span>
+        <div class="stack-controls">
+          <button class="stack-arrow" id="companiesPrev" type="button" aria-label="Ver empresa anterior">←</button>
+          <button class="stack-arrow" id="companiesNext" type="button" aria-label="Ver próxima empresa">→</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="kicker">Perguntas frequentes</span>
+      <h2>Ainda com dúvida? Provavelmente já respondemos.</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q">
+          <span>Preciso ter algum conhecimento prévio?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><p>Não. O DevClub foi feito pra iniciante começar do zero absoluto e ir avançando com didática prática.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          <span>Quanto tempo dura a formação?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><p>Em média 4 meses no ritmo recomendado, mas você tem acesso por 12 meses pra estudar no seu tempo.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          <span>Como funciona o suporte durante o curso?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><p>Mentoria, comunidade ativa e suporte técnico — ninguém fica travado sozinho numa tela de erro.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          <span>Tem garantia?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><p>Sim, garantia incondicional nos primeiros dias após a matrícula.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -155,17 +360,74 @@
     <span class="kicker" style="justify-content:center; display:flex;">Sua vez</span>
     <h2>Sua carreira também pode virar um "git commit -m 'nova profissão'".</h2>
     <p class="sub2">As inscrições abrem em breve. Entra na lista e seja avisado antes de todo mundo.</p>
-    <a href="#" class="btn-primary">Quero ser avisado →</a>
+    <a href="#contato" class="btn-primary">Quero ser avisado →</a>
   </div>
 </section>
 
-<footer>
+<!-- ===== CONTATO ===== -->
+<section id="contato">
   <div class="wrap">
-    <div class="logo"><span class="dot"></span>devclub</div>
-    <div class="f-mono">© 2026 DevClub · página conceito, dados fictícios</div>
+    <div class="section-head reveal">
+      <span class="kicker">Contato</span>
+      <h2>Ainda tem dúvida? Vamos conversar.</h2>
+      <p class="section-sub">Dúvida, sugestão ou reclamação — a gente responde.</p>
+    </div>
+    <div class="contact-grid reveal">
+      <form class="contact-form" id="contactForm">
+        <label>Nome<input type="text" name="nome" required></label>
+        <label>E-mail<input type="email" name="email" required></label>
+        <label>Mensagem<textarea name="mensagem" rows="4" required></textarea></label>
+        <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">Enviar mensagem</button>
+        <p class="contact-note" id="contactNote"></p>
+      </form>
+      <div class="contact-side">
+        <a class="contact-link" href="mailto:contato@devclub.com.br">✉ contato@devclub.com.br</a>
+        <a class="contact-link" href="#" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
+        <div class="contact-social">
+          <a href="https://www.instagram.com/devclubescola/" aria-label="Instagram">Instagram</a>
+          <a href="https://www.linkedin.com/school/dev-club-devs/posts/?feedView=all" aria-label="LinkedIn">LinkedIn</a>
+          <a href="https://www.youtube.com/@canaldevclub" aria-label="YouTube">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RODAPÉ INSTITUCIONAL ===== -->
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <div class="logo"><span class="dot"></span>devclub</div>
+      <p class="footer-tagline">Formação full stack, do zero ao primeiro emprego.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegação</h4>
+      <a href="#quem-somos">Quem somos</a>
+      <a href="#formacao">Formação</a>
+      <a href="#alunos">Alunos</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contato">Contato</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="#">Política de Privacidade</a>
+      <a href="#">Termos de Uso</a>
+    </div>
+    <div class="footer-col">
+      <h4>Newsletter</h4>
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="email" placeholder="seu@email.com" required>
+        <button type="submit">→</button>
+      </form>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span class="f-mono">© 2026 DevClub · CNPJ 00.000.000/0001-00</span>
+    <a class="site-credit" href="https://www.mpempreende.com.br/marcospaulo/">Site produzido por <strong>Marcos Paulo</strong> <span aria-hidden="true">↗</span></a>
   </div>
 </footer>
 
+<script src="bg-animation.js" defer></script>
 <script src="script.js" defer></script>
 </body>
 </html>
