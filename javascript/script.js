@@ -124,6 +124,57 @@ navLinks.forEach((link) => {
 // O brilho do botão e a onda no fundo continuam surgindo enquanto ele estiver selecionado.
 setInterval(() => { if (activeNavLink) emitNavPulse(activeNavLink); }, 1700);
 
+// Animação de contagem dos números nas estatísticas
+function animateCounter(element, target, duration = 2000) {
+  let current = 0;
+  const increment = target / (duration / 16);
+  const originalText = element.textContent;
+  const suffix = element.querySelector('.u') ? element.querySelector('.u').textContent : '';
+  
+  const animate = () => {
+    current += increment;
+    if (current < target) {
+      const displayValue = Math.floor(current).toLocaleString('pt-BR');
+      element.textContent = displayValue;
+      if (suffix) {
+        const suffixSpan = document.createElement('span');
+        suffixSpan.className = 'u';
+        suffixSpan.textContent = suffix;
+        element.appendChild(suffixSpan);
+      }
+      requestAnimationFrame(animate);
+    } else {
+      element.textContent = target.toLocaleString('pt-BR');
+      if (suffix) {
+        const suffixSpan = document.createElement('span');
+        suffixSpan.className = 'u';
+        suffixSpan.textContent = suffix;
+        element.appendChild(suffixSpan);
+      }
+      element.classList.add('count-active');
+    }
+  };
+  animate();
+}
+
+// Observador para iniciar a contagem quando os números entram em view
+const statNumbers = document.querySelectorAll('.stat-num');
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting && !entry.target.classList.contains('count-active')) {
+      const text = entry.target.textContent.replace(/\D/g, '');
+      const numericValue = parseInt(text) || 0;
+      
+      if (numericValue > 0) {
+        animateCounter(entry.target, numericValue, 2500);
+      }
+      countObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+statNumbers.forEach((el) => countObserver.observe(el));
+
 // FAQ accordion
 document.querySelectorAll('.faq-item').forEach((item) => {
   const btn = item.querySelector('.faq-q');
@@ -137,6 +188,21 @@ document.querySelectorAll('.faq-item').forEach((item) => {
 // Formulário de contato (demo — sem back-end conectado ainda)
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
+  const emailInput = contactForm.querySelector('input[type="email"]');
+
+  if (emailInput) {
+    emailInput.addEventListener('invalid', () => {
+      const message = emailInput.validity.valueMissing
+        ? 'Informe seu e-mail.'
+        : 'Digite um endereço de e-mail válido, como nome@exemplo.com.';
+      emailInput.setCustomValidity(message);
+    });
+
+    emailInput.addEventListener('input', () => {
+      emailInput.setCustomValidity('');
+    });
+  }
+
   contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
     document.getElementById('contactNote').textContent = 'Mensagem pronta pra envio — conecte este formulário a um back-end ou serviço de e-mail.';
