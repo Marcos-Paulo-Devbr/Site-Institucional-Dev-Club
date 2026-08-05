@@ -23,43 +23,107 @@
   html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); font-family: 'Inter', sans-serif; cursor: none; overflow-x: hidden; }
   .mono{ font-family: 'JetBrains Mono', monospace; }
   .wrap{ max-width:920px; margin:0 auto; padding: 0 24px; }
+  a{ text-decoration:none; color:inherit; }
 
   /* CURSOR */
   #cursor-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
   #cursor-ring { width: 32px; height: 32px; border: 1.5px solid rgba(167,139,250,0.5); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: all 0.2s ease; }
 
+  #particles-canvas{ position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:.28; }
+  .mouse-glow{ position:fixed; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle, rgba(167,139,250,0.06) 0%, transparent 70%); pointer-events:none; z-index:1; transform:translate(-50%,-50%); }
+
+  /* NAV */
+  .nav{ position:sticky; top:0; z-index:20; background:rgba(11,13,18,0.85); backdrop-filter:blur(10px); border-bottom:1px solid var(--line-soft); }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:18px 24px; max-width:920px; margin:0 auto; }
+  .brand{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:15px; }
+  .brand .dot{ width:8px; height:8px; border-radius:50%; background:#f4a13a; }
+  .back-link{ font-size:13px; color:var(--text-dim); transition:color .2s ease; }
+  .back-link:hover{ color:var(--accent); }
+
   /* HERO */
-  .hero{ padding:80px 0 40px; text-align: center; }
+  .hero{ padding:64px 0 40px; text-align: center; position:relative; z-index:1; }
   .eyebrow{ font-size:12px; color:var(--accent); background:rgba(167,139,250,0.08); border:1px solid rgba(167,139,250,0.25); padding:5px 12px; border-radius:6px; display: inline-block; margin-bottom: 24px; }
   h1{ font-size:48px; font-weight:800; margin:0 0 20px; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .lede{ font-size:18px; color:var(--text-dim); max-width:600px; margin:0 auto 40px; line-height:1.6; }
-  
+
   .preview-img{ width: 100%; border-radius: 16px; border: 1px solid var(--line); box-shadow: 0 30px 60px rgba(0,0,0,0.5); margin-top: 40px; transition: transform 0.5s ease; }
   .preview-img:hover{ transform: scale(1.02) translateY(-10px); }
+
+  section{ position:relative; z-index:1; }
+  .section-title{ font-size:28px; font-weight:800; margin:0 0 12px; text-align:center; }
+  .section-sub{ font-size:15px; color:var(--text-dim); text-align:center; max-width:520px; margin:0 auto 40px; line-height:1.6; }
+
+  /* FEATURES */
+  .features-section{ padding:90px 0 0; }
+  .features-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:768px){ .features-grid{ grid-template-columns:1fr; } }
+  .feature-card{ background:var(--bg-card); border:1px solid var(--line-soft); border-radius:12px; padding:24px; transition:all .3s ease; }
+  .feature-card:hover{ border-color:var(--accent); transform:translateY(-4px); }
+  .feature-icon{ width:40px; height:40px; border-radius:10px; background:rgba(167,139,250,0.12); display:flex; align-items:center; justify-content:center; margin-bottom:16px; font-size:18px; }
+  .feature-card h3{ font-size:16px; margin:0 0 8px; }
+  .feature-card p{ font-size:13.5px; color:var(--text-dim); line-height:1.6; margin:0; }
 
   /* PROCESSO */
   .process-section{ padding: 100px 0; }
   .process-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  @media (max-width:768px){ .process-grid{ grid-template-columns:1fr; } }
   .code-window{ background: var(--code-bg); border-radius: 12px; border: 1px solid var(--line); overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
   .code-header{ background: #2d2d2d; padding: 12px; display: flex; gap: 8px; }
   .code-dot{ width: 10px; height: 10px; border-radius: 50%; }
   .code-body{ padding: 24px; font-size: 13px; line-height: 1.6; color: #d4d4d4; min-height: 200px; }
-  
+
   .step-item{ padding: 24px; border-radius: 12px; border: 1px solid transparent; transition: all 0.3s ease; opacity: 0.4; }
   .step-item.active{ opacity: 1; background: var(--bg-card); border-color: var(--line-soft); }
   .step-num{ font-size: 12px; color: var(--accent); font-weight: 800; margin-bottom: 8px; display: block; }
   .step-item h3{ margin: 0 0 8px; font-size: 18px; }
   .step-item p{ margin: 0; font-size: 14px; color: var(--text-dim); }
 
+  /* AGENDA — detalhe interativo */
+  .booking-section{ padding:0 0 100px; }
+  .booking-panel{ background:var(--bg-card); border:1px solid var(--line-soft); border-radius:16px; padding:28px; }
+  .day-picker{ display:flex; gap:8px; margin-bottom:24px; overflow-x:auto; }
+  .day-btn{ flex:1; min-width:64px; text-align:center; padding:12px 8px; border-radius:10px; border:1px solid var(--line-soft); background:var(--bg-raised); color:var(--text-dim); cursor:pointer; transition:all .2s ease; }
+  .day-btn .dow{ font-size:10.5px; text-transform:uppercase; color:var(--text-faint); display:block; margin-bottom:4px; }
+  .day-btn .num{ font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; }
+  .day-btn.active{ border-color:var(--accent); background:rgba(167,139,250,0.1); color:var(--text); }
+  .slots-title{ font-size:12px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.06em; margin-bottom:14px; }
+  .slots-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px; }
+  @media (max-width:520px){ .slots-grid{ grid-template-columns:repeat(3,1fr); } }
+  .slot-btn{ font-family:'JetBrains Mono',monospace; font-size:13px; padding:10px 4px; border-radius:8px; border:1px solid var(--line-soft); background:var(--bg-raised); color:var(--text-dim); cursor:pointer; transition:all .2s ease; }
+  .slot-btn:hover{ border-color:var(--accent); }
+  .slot-btn.selected{ border-color:var(--accent); background:var(--accent); color:#1a1030; font-weight:700; }
+  .slot-btn.taken{ opacity:.3; text-decoration:line-through; cursor:not-allowed; }
+  .booking-confirm{ font-size:13.5px; color:var(--text-dim); padding:14px 16px; border-radius:10px; background:var(--bg-raised); border:1px solid var(--line-soft); }
+  .booking-confirm strong{ color:var(--accent); }
+
+  /* TECH */
+  .tech-section{ padding:0 0 90px; text-align:center; }
+  .tech-badges{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+  .tech-badge{ font-family:'JetBrains Mono',monospace; font-size:12.5px; padding:8px 16px; border-radius:20px; border:1px solid var(--line-soft); background:var(--bg-card); color:var(--text-dim); }
+
   .btn{ display: inline-flex; align-items: center; padding: 14px 28px; background: var(--accent); color: #000; font-weight: 700; border-radius: 8px; text-decoration:none; transition: all 0.2s ease; }
   .btn:hover{ transform: translateY(-2px); box-shadow: 0 10px 20px rgba(167,139,250,0.3); }
+  .btn-lg{ padding:16px 40px; font-size:16px; }
+
+  .final-cta{ text-align:center; padding:0 0 100px; }
+  .cta-title{ font-size:28px; font-weight:800; margin:0 0 16px; }
 
   .reveal{ opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
   .reveal.visible{ opacity: 1; transform: translateY(0); }
 </style>
+<link rel="stylesheet" href="assets/cinematic.css">
 </head>
 <body>
 <div id="cursor-dot"></div><div id="cursor-ring"></div>
+<div class="mouse-glow" id="mouseGlow"></div>
+<canvas id="particles-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand"><span class="dot"></span> DevClub</div>
+    <a href="../index.html#contato" class="back-link">&larr; Voltar para o site</a>
+  </div>
+</nav>
 
 <div class="wrap">
   <section class="hero reveal">
@@ -67,10 +131,38 @@
     <h1>Sistema de Agendamento Online</h1>
     <p class="lede">Automatize o tempo e organize negócios. Aprenda a gerenciar calendários complexos, disponibilidade de horários e fluxos de reserva inteligentes.</p>
     <a href="../index.html#contato" class="btn">Criar este projeto →</a>
-    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663848180033/ZZUBsSbAGESDersS.png" class="preview-img" alt="Mockup Sistema de Agendamento">
+    <img src="img/agendamento-preview.webp" class="preview-img" alt="Mockup Sistema de Agendamento" width="1280" height="720">
+  </section>
+
+  <section class="features-section">
+    <div class="reveal">
+      <h2 class="section-title">O que você vai construir</h2>
+      <p class="section-sub">Um fluxo de reserva completo, do dia escolhido até a confirmação no banco de dados.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon mono">▤</div>
+        <h3>Calendário interativo</h3>
+        <p>Navegação por dias e horários com os slots já ocupados automaticamente bloqueados.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon mono">✉</div>
+        <h3>Notificações automáticas</h3>
+        <p>Confirmação por e-mail assim que o horário é reservado, sem intervenção manual.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon mono">⚙</div>
+        <h3>Painel do prestador</h3>
+        <p>Uma tela separada pra quem presta o serviço gerenciar a própria agenda e disponibilidade.</p>
+      </div>
+    </div>
   </section>
 
   <section class="process-section">
+    <div class="reveal">
+      <h2 class="section-title">Como a agenda funciona por trás</h2>
+      <p class="section-sub">Datas, disponibilidade e confirmação — as três camadas de lógica do sistema.</p>
+    </div>
     <div class="process-grid">
       <div class="code-window reveal">
         <div class="code-header">
@@ -104,13 +196,51 @@
       </div>
     </div>
   </section>
+
+  <!-- DETALHE INTERATIVO: seleção de dia + horário -->
+  <section class="booking-section">
+    <div class="reveal">
+      <h2 class="section-title">Experimente o fluxo de reserva</h2>
+      <p class="section-sub">Escolha um dia, depois um horário livre — os riscados já estão ocupados, como no sistema real.</p>
+    </div>
+    <div class="booking-panel reveal">
+      <div class="day-picker" id="dayPicker"></div>
+      <div class="slots-title mono" id="slotsTitle">Horários disponíveis</div>
+      <div class="slots-grid" id="slotsGrid"></div>
+      <div class="booking-confirm mono" id="bookingConfirm">Selecione um dia e um horário pra ver a confirmação aqui.</div>
+    </div>
+  </section>
+
+  <section class="tech-section">
+    <div class="reveal">
+      <h2 class="section-title">Tecnologias deste projeto</h2>
+      <div class="tech-badges">
+        <span class="tech-badge">JavaScript Date API</span>
+        <span class="tech-badge">CSS Grid</span>
+        <span class="tech-badge">LocalStorage</span>
+        <span class="tech-badge">Node.js / Express</span>
+        <span class="tech-badge">E-mail (API)</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta reveal">
+    <h2 class="cta-title">Pronto para construir o seu?</h2>
+    <p class="lede" style="margin:0 auto 32px;">Domine as ferramentas que as maiores empresas de tecnologia usam no dia a dia.</p>
+    <a href="../index.html#contato" class="btn btn-lg">Garantir minha vaga no curso →</a>
+  </section>
 </div>
 
 <script>
 const dot = document.getElementById('cursor-dot');
 const ring = document.getElementById('cursor-ring');
+const glow = document.getElementById('mouseGlow');
 let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx+'px'; dot.style.top = my+'px'; });
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx+'px'; dot.style.top = my+'px';
+  glow.style.left = mx+'px'; glow.style.top = my+'px';
+});
 function anim() { rx += (mx-rx)*0.1; ry += (my-ry)*0.1; ring.style.left = rx+'px'; ring.style.top = ry+'px'; requestAnimationFrame(anim); }
 anim();
 
@@ -132,6 +262,100 @@ function updateCode(step) {
   else if(step === "2") code.innerHTML = "// 2. Lógica de Slots<br>function checkSlots(date) {<br>&nbsp;&nbsp;return allSlots.filter(slot => {<br>&nbsp;&nbsp;&nbsp;&nbsp;return !bookedSlots.includes(slot);<br>&nbsp;&nbsp;});<br>}";
   else if(step === "3") code.innerHTML = "// 3. Salvando Reserva<br>async function bookSlot(data) {<br>&nbsp;&nbsp;await api.post('/bookings', data);<br>&nbsp;&nbsp;toast.success('Agendado!');<br>}";
 }
+
+// Mini agenda: escolhe dia, escolhe horário livre, mostra confirmação
+const dows = ['dom','seg','ter','qua','qui','sex','sáb'];
+const today = new Date();
+const days = Array.from({length:6}, (_, i) => {
+  const d = new Date(today);
+  d.setDate(today.getDate() + i);
+  return d;
+});
+const takenByDay = { 0: [1,4], 1: [0,2,5], 2: [3], 3: [0,1,2,6], 4: [], 5: [2,3] };
+const allSlots = ['09:00','10:30','11:30','13:00','14:30','15:30','16:30','18:00'];
+
+let selectedDayIndex = 0;
+let selectedSlot = null;
+
+const dayPicker = document.getElementById('dayPicker');
+const slotsGrid = document.getElementById('slotsGrid');
+const slotsTitle = document.getElementById('slotsTitle');
+const bookingConfirm = document.getElementById('bookingConfirm');
+
+function renderDays() {
+  dayPicker.innerHTML = days.map((d, i) => `
+    <button type="button" class="day-btn${i === selectedDayIndex ? ' active' : ''}" data-i="${i}">
+      <span class="dow">${dows[d.getDay()]}</span>
+      <span class="num">${d.getDate()}</span>
+    </button>
+  `).join('');
+  dayPicker.querySelectorAll('.day-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedDayIndex = Number(btn.dataset.i);
+      selectedSlot = null;
+      renderDays();
+      renderSlots();
+      renderConfirm();
+    });
+  });
+}
+function renderSlots() {
+  const taken = takenByDay[selectedDayIndex] || [];
+  const dayLabel = days[selectedDayIndex].toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'short' });
+  slotsTitle.textContent = `Horários disponíveis — ${dayLabel}`;
+  slotsGrid.innerHTML = allSlots.map((s, i) => {
+    const isTaken = taken.includes(i);
+    const isSelected = selectedSlot === i;
+    return `<button type="button" class="slot-btn${isTaken ? ' taken' : ''}${isSelected ? ' selected' : ''}" data-i="${i}" ${isTaken ? 'disabled' : ''}>${s}</button>`;
+  }).join('');
+  slotsGrid.querySelectorAll('.slot-btn:not(.taken)').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedSlot = Number(btn.dataset.i);
+      renderSlots();
+      renderConfirm();
+    });
+  });
+}
+function renderConfirm() {
+  if (selectedSlot === null) {
+    bookingConfirm.innerHTML = 'Selecione um dia e um horário pra ver a confirmação aqui.';
+    return;
+  }
+  const dayLabel = days[selectedDayIndex].toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'short' });
+  bookingConfirm.innerHTML = `✓ Horário selecionado: <strong>${dayLabel} às ${allSlots[selectedSlot]}</strong>`;
+}
+renderDays();
+renderSlots();
+renderConfirm();
+
+// Partículas
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize(); window.addEventListener('resize', resize);
+const particles = [];
+for (let i = 0; i < 40; i++) {
+  particles.push({
+    x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+    vx: (Math.random() - 0.5) * 0.2, vy: (Math.random() - 0.5) * 0.2,
+    r: Math.random() * 1.5, alpha: Math.random() * 0.2
+  });
+}
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(167,139,250,${p.alpha})`; ctx.fill();
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+  });
+  requestAnimationFrame(draw);
+}
+draw();
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="assets/cinematic.js" defer></script>
 </body>
 </html>

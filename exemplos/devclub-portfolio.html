@@ -23,43 +23,106 @@
   html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); font-family: 'Inter', sans-serif; cursor: none; overflow-x: hidden; }
   .mono{ font-family: 'JetBrains Mono', monospace; }
   .wrap{ max-width:920px; margin:0 auto; padding: 0 24px; }
+  a{ text-decoration:none; color:inherit; }
 
   /* CURSOR */
   #cursor-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
   #cursor-ring { width: 32px; height: 32px; border: 1.5px solid rgba(236,72,153,0.5); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: all 0.2s ease; }
 
+  #particles-canvas{ position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:.28; }
+  .mouse-glow{ position:fixed; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle, rgba(236,72,153,0.06) 0%, transparent 70%); pointer-events:none; z-index:1; transform:translate(-50%,-50%); }
+
+  /* NAV */
+  .nav{ position:sticky; top:0; z-index:20; background:rgba(11,13,18,0.85); backdrop-filter:blur(10px); border-bottom:1px solid var(--line-soft); }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:18px 24px; max-width:920px; margin:0 auto; }
+  .brand{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:15px; }
+  .brand .dot{ width:8px; height:8px; border-radius:50%; background:#f4a13a; }
+  .back-link{ font-size:13px; color:var(--text-dim); transition:color .2s ease; }
+  .back-link:hover{ color:var(--accent); }
+
   /* HERO */
-  .hero{ padding:80px 0 40px; text-align: center; }
+  .hero{ padding:64px 0 40px; text-align: center; position:relative; z-index:1; }
   .eyebrow{ font-size:12px; color:var(--accent); background:rgba(236,72,153,0.08); border:1px solid rgba(236,72,153,0.25); padding:5px 12px; border-radius:6px; display: inline-block; margin-bottom: 24px; }
   h1{ font-size:48px; font-weight:800; margin:0 0 20px; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .lede{ font-size:18px; color:var(--text-dim); max-width:600px; margin:0 auto 40px; line-height:1.6; }
-  
+
   .preview-img{ width: 100%; border-radius: 16px; border: 1px solid var(--line); box-shadow: 0 30px 60px rgba(0,0,0,0.5); margin-top: 40px; transition: transform 0.5s ease; }
   .preview-img:hover{ transform: scale(1.02) translateY(-10px); }
+
+  section{ position:relative; z-index:1; }
+  .section-title{ font-size:28px; font-weight:800; margin:0 0 12px; text-align:center; }
+  .section-sub{ font-size:15px; color:var(--text-dim); text-align:center; max-width:520px; margin:0 auto 40px; line-height:1.6; }
+
+  /* FEATURES */
+  .features-section{ padding:90px 0 0; }
+  .features-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:768px){ .features-grid{ grid-template-columns:1fr; } }
+  .feature-card{ background:var(--bg-card); border:1px solid var(--line-soft); border-radius:12px; padding:24px; transition:all .3s ease; }
+  .feature-card:hover{ border-color:var(--accent); transform:translateY(-4px); }
+  .feature-icon{ width:40px; height:40px; border-radius:10px; background:rgba(236,72,153,0.12); display:flex; align-items:center; justify-content:center; margin-bottom:16px; font-size:18px; }
+  .feature-card h3{ font-size:16px; margin:0 0 8px; }
+  .feature-card p{ font-size:13.5px; color:var(--text-dim); line-height:1.6; margin:0; }
 
   /* PROCESSO */
   .process-section{ padding: 100px 0; }
   .process-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  @media (max-width:768px){ .process-grid{ grid-template-columns:1fr; } }
   .code-window{ background: var(--code-bg); border-radius: 12px; border: 1px solid var(--line); overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
   .code-header{ background: #2d2d2d; padding: 12px; display: flex; gap: 8px; }
   .code-dot{ width: 10px; height: 10px; border-radius: 50%; }
   .code-body{ padding: 24px; font-size: 13px; line-height: 1.6; color: #d4d4d4; min-height: 200px; }
-  
+
   .step-item{ padding: 24px; border-radius: 12px; border: 1px solid transparent; transition: all 0.3s ease; opacity: 0.4; }
   .step-item.active{ opacity: 1; background: var(--bg-card); border-color: var(--line-soft); }
   .step-num{ font-size: 12px; color: var(--accent); font-weight: 800; margin-bottom: 8px; display: block; }
   .step-item h3{ margin: 0 0 8px; font-size: 18px; }
   .step-item p{ margin: 0; font-size: 14px; color: var(--text-dim); }
 
+  /* GALERIA — detalhe interativo */
+  .gallery-section{ padding:0 0 100px; }
+  .gallery-filters{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:28px; }
+  .filter-btn{ font-family:'JetBrains Mono',monospace; font-size:12.5px; padding:9px 18px; border-radius:20px; border:1px solid var(--line-soft); background:var(--bg-card); color:var(--text-dim); cursor:pointer; transition:all .2s ease; }
+  .filter-btn.active{ border-color:var(--accent); color:var(--accent); background:rgba(236,72,153,0.08); }
+  .gallery-count{ text-align:center; font-size:12.5px; color:var(--text-faint); font-family:'JetBrains Mono',monospace; margin-bottom:20px; }
+  .gallery-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  @media (max-width:768px){ .gallery-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .gallery-grid{ grid-template-columns:1fr; } }
+  .gallery-card{ background:var(--bg-card); border:1px solid var(--line-soft); border-radius:12px; padding:20px; transition:all .3s ease; }
+  .gallery-card.hidden{ display:none; }
+  .gallery-card:hover{ border-color:var(--accent); transform:translateY(-4px); }
+  .gallery-thumb{ height:90px; border-radius:8px; background:linear-gradient(135deg, var(--bg-raised), var(--bg-card)); display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:14px; color:var(--text-faint); }
+  .gallery-card h4{ font-size:14.5px; margin:0 0 6px; }
+  .gallery-card .gallery-tags{ display:flex; gap:6px; flex-wrap:wrap; }
+  .gallery-tag{ font-size:10.5px; font-family:'JetBrains Mono',monospace; padding:3px 8px; border-radius:10px; background:var(--bg-raised); color:var(--text-faint); }
+
+  /* TECH */
+  .tech-section{ padding:0 0 90px; text-align:center; }
+  .tech-badges{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+  .tech-badge{ font-family:'JetBrains Mono',monospace; font-size:12.5px; padding:8px 16px; border-radius:20px; border:1px solid var(--line-soft); background:var(--bg-card); color:var(--text-dim); }
+
   .btn{ display: inline-flex; align-items: center; padding: 14px 28px; background: var(--accent); color: #fff; font-weight: 700; border-radius: 8px; text-decoration:none; transition: all 0.2s ease; }
   .btn:hover{ transform: translateY(-2px); box-shadow: 0 10px 20px rgba(236,72,153,0.3); }
+  .btn-lg{ padding:16px 40px; font-size:16px; }
+
+  .final-cta{ text-align:center; padding:0 0 100px; }
+  .cta-title{ font-size:28px; font-weight:800; margin:0 0 16px; }
 
   .reveal{ opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
   .reveal.visible{ opacity: 1; transform: translateY(0); }
 </style>
+<link rel="stylesheet" href="assets/cinematic.css">
 </head>
 <body>
 <div id="cursor-dot"></div><div id="cursor-ring"></div>
+<div class="mouse-glow" id="mouseGlow"></div>
+<canvas id="particles-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand"><span class="dot"></span> DevClub</div>
+    <a href="../index.html#contato" class="back-link">&larr; Voltar para o site</a>
+  </div>
+</nav>
 
 <div class="wrap">
   <section class="hero reveal">
@@ -67,10 +130,38 @@
     <h1>Portfólio Profissional de Alto Impacto</h1>
     <p class="lede">Sua vitrine para o mundo. Aprenda a construir um espaço único para apresentar seus trabalhos, serviços e atrair as melhores oportunidades do mercado.</p>
     <a href="../index.html#contato" class="btn">Criar este projeto →</a>
-    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663848180033/ifJOENTzVhDvQSFk.png" class="preview-img" alt="Mockup Portfólio Profissional">
+    <img src="img/portfolio-preview.webp" class="preview-img" alt="Mockup Portfólio Profissional" width="1280" height="720">
+  </section>
+
+  <section class="features-section">
+    <div class="reveal">
+      <h2 class="section-title">O que você vai construir</h2>
+      <p class="section-sub">Um portfólio que filtra, organiza e apresenta seu trabalho do jeito que cada recrutador quer ver.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon mono">▦</div>
+        <h3>Vitrine de projetos</h3>
+        <p>Galeria com filtro por tecnologia, pra quem visita achar exatamente o tipo de trabalho que procura.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon mono">☺</div>
+        <h3>Sobre mim</h3>
+        <p>Uma seção que conta sua trajetória sem soar genérica — trajetória real, não um resumo de LinkedIn.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon mono">✉</div>
+        <h3>Contato direto</h3>
+        <p>Links pra e-mail, GitHub e LinkedIn em destaque — sem esconder atrás de três cliques.</p>
+      </div>
+    </div>
   </section>
 
   <section class="process-section">
+    <div class="reveal">
+      <h2 class="section-title">Como o portfólio ganha forma</h2>
+      <p class="section-sub">Da estrutura dos cards até a lógica que filtra por tecnologia.</p>
+    </div>
     <div class="process-grid">
       <div class="code-window reveal">
         <div class="code-header">
@@ -106,13 +197,84 @@
       </div>
     </div>
   </section>
+
+  <!-- DETALHE INTERATIVO: galeria com filtro por tecnologia -->
+  <section class="gallery-section">
+    <div class="reveal">
+      <h2 class="section-title">Filtre como um visitante filtraria</h2>
+      <p class="section-sub">É exatamente essa lógica de filtro que você implementa nesse projeto — clique numa tecnologia.</p>
+    </div>
+    <div class="gallery-filters reveal">
+      <button type="button" class="filter-btn active" data-filter="all">Todos</button>
+      <button type="button" class="filter-btn" data-filter="react">React</button>
+      <button type="button" class="filter-btn" data-filter="node">Node</button>
+      <button type="button" class="filter-btn" data-filter="design">Design</button>
+    </div>
+    <p class="gallery-count mono" id="galleryCount">6 projetos</p>
+    <div class="gallery-grid reveal" id="galleryGrid">
+      <div class="gallery-card" data-tech="react design">
+        <div class="gallery-thumb">◧</div>
+        <h4>App de Finanças Pessoais</h4>
+        <div class="gallery-tags"><span class="gallery-tag">react</span><span class="gallery-tag">design</span></div>
+      </div>
+      <div class="gallery-card" data-tech="node">
+        <div class="gallery-thumb">⛁</div>
+        <h4>API de Reservas</h4>
+        <div class="gallery-tags"><span class="gallery-tag">node</span></div>
+      </div>
+      <div class="gallery-card" data-tech="design">
+        <div class="gallery-thumb">◨</div>
+        <h4>Identidade Visual — Café Nômade</h4>
+        <div class="gallery-tags"><span class="gallery-tag">design</span></div>
+      </div>
+      <div class="gallery-card" data-tech="react">
+        <div class="gallery-thumb">▣</div>
+        <h4>Painel de Métricas</h4>
+        <div class="gallery-tags"><span class="gallery-tag">react</span></div>
+      </div>
+      <div class="gallery-card" data-tech="node design">
+        <div class="gallery-thumb">◫</div>
+        <h4>Loja de Assinaturas</h4>
+        <div class="gallery-tags"><span class="gallery-tag">node</span><span class="gallery-tag">design</span></div>
+      </div>
+      <div class="gallery-card" data-tech="react node">
+        <div class="gallery-thumb">▦</div>
+        <h4>Chat em Tempo Real</h4>
+        <div class="gallery-tags"><span class="gallery-tag">react</span><span class="gallery-tag">node</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tech-section">
+    <div class="reveal">
+      <h2 class="section-title">Tecnologias deste projeto</h2>
+      <div class="tech-badges">
+        <span class="tech-badge">HTML5</span>
+        <span class="tech-badge">CSS Grid &amp; Flexbox</span>
+        <span class="tech-badge">JavaScript</span>
+        <span class="tech-badge">Animações CSS</span>
+        <span class="tech-badge">Deploy (GitHub Pages)</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta reveal">
+    <h2 class="cta-title">Pronto para construir o seu?</h2>
+    <p class="lede" style="margin:0 auto 32px;">Domine as ferramentas que as maiores empresas de tecnologia usam no dia a dia.</p>
+    <a href="../index.html#contato" class="btn btn-lg">Garantir minha vaga no curso →</a>
+  </section>
 </div>
 
 <script>
 const dot = document.getElementById('cursor-dot');
 const ring = document.getElementById('cursor-ring');
+const glow = document.getElementById('mouseGlow');
 let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx+'px'; dot.style.top = my+'px'; });
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx+'px'; dot.style.top = my+'px';
+  glow.style.left = mx+'px'; glow.style.top = my+'px';
+});
 function anim() { rx += (mx-rx)*0.1; ry += (my-ry)*0.1; ring.style.left = rx+'px'; ring.style.top = ry+'px'; requestAnimationFrame(anim); }
 anim();
 
@@ -134,6 +296,57 @@ function updateCode(step) {
   else if(step === "2") code.innerHTML = "/* 2. Estilo Único */<br>.portfolio-card {<br>&nbsp;&nbsp;backdrop-filter: blur(10px);<br>&nbsp;&nbsp;transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);<br>&nbsp;&nbsp;box-shadow: 0 10px 30px -15px rgba(0,0,0,0.5);<br>}";
   else if(step === "3") code.innerHTML = "// 3. Lógica de Contato<br>async function sendEmail(formData) {<br>&nbsp;&nbsp;const res = await fetch('/api/contact', {<br>&nbsp;&nbsp;&nbsp;&nbsp;method: 'POST',<br>&nbsp;&nbsp;&nbsp;&nbsp;body: JSON.stringify(formData)<br>&nbsp;&nbsp;});<br>&nbsp;&nbsp;return res.ok;<br>}";
 }
+
+// Galeria com filtro: mesma lógica que o aluno implementa no projeto
+const filterBtns = document.querySelectorAll('.filter-btn');
+const galleryCards = document.querySelectorAll('.gallery-card');
+const galleryCount = document.getElementById('galleryCount');
+
+function applyFilter(filter) {
+  let visible = 0;
+  galleryCards.forEach(card => {
+    const matches = filter === 'all' || card.dataset.tech.split(' ').includes(filter);
+    card.classList.toggle('hidden', !matches);
+    if (matches) visible++;
+  });
+  galleryCount.textContent = `${visible} projeto${visible === 1 ? '' : 's'}`;
+}
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilter(btn.dataset.filter);
+  });
+});
+
+// Partículas
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize(); window.addEventListener('resize', resize);
+const particles = [];
+for (let i = 0; i < 40; i++) {
+  particles.push({
+    x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+    vx: (Math.random() - 0.5) * 0.2, vy: (Math.random() - 0.5) * 0.2,
+    r: Math.random() * 1.5, alpha: Math.random() * 0.2
+  });
+}
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(236,72,153,${p.alpha})`; ctx.fill();
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+  });
+  requestAnimationFrame(draw);
+}
+draw();
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="assets/cinematic.js" defer></script>
 </body>
 </html>

@@ -30,7 +30,7 @@
 <nav>
   <div class="wrap">
     <div class="logo"><span class="dot"></span>DevClub</div>
-    <div class="navlinks">
+    <div class="navlinks" id="navlinks">
       <a href="#quem-somos">Quem somos</a>
       <a href="#formacao">Formação</a>
       <a href="#time">Equipe</a>
@@ -38,32 +38,86 @@
       <a href="#faq">FAQ</a>
       <a href="#contato">Contato</a>
     </div>
-    <a href="#cta" class="nav-cta">$ quero_vaga</a>
+    <div class="nav-actions">
+      <a href="#cta" class="nav-cta">$ quero_vaga</a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="navlinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </nav>
 
-<header class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <div class="eyebrow">FORMAÇÃO FULL STACK · 100% ONLINE</div>
-      <h1 class="headline">Você não nasceu programador.<br>Você <span class="accent">decidiu</span> virar um.</h1>
-      <p class="sub">O DevClub pega gente comum — de qualquer profissão, qualquer idade, qualquer cidade — e transforma em desenvolvedor full stack contratável. Sem enrolação, sem teoria inútil, sem 5 anos de faculdade.</p>
-      <div class="hero-ctas">
-        <a href="#cta" class="btn-primary">Começar minha transformação →</a>
-        <a href="#formacao" class="btn-ghost">Ver a formação</a>
+<header class="hero-cinematic" id="heroCinematic">
+  <div class="hero-cinematic-pin">
+    <canvas id="heroCanvas" class="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-canvas-fade" aria-hidden="true"></div>
+
+    <div class="hero-phase is-active" data-phase="0">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">FORMAÇÃO FULL STACK · 100% ONLINE</div>
+          <h1 class="headline">Você não nasceu programador.<br>Você <span class="accent">decidiu</span> virar um.</h1>
+          <p class="sub">O DevClub pega gente comum — de qualquer profissão, qualquer idade, qualquer cidade — e transforma em desenvolvedor full stack contratável. Sem enrolação, sem teoria inútil, sem 5 anos de faculdade.</p>
+          <div class="hero-ctas">
+            <a href="#cta" class="btn-primary">Começar minha transformação →</a>
+            <a href="#formacao" class="btn-ghost">Ver a formação</a>
+          </div>
+        </div>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span></span><span></span><span></span>
+            <div class="title">carreira.transform()</div>
+          </div>
+          <div class="terminal-body" id="termBody"></div>
+        </div>
       </div>
     </div>
-    <div class="terminal">
-      <div class="terminal-bar">
-        <span style="background:#FF5F57;"></span><span style="background:#FEBC2E;"></span><span style="background:#28C840;"></span>
-        <div class="title">carreira.transform()</div>
+
+    <div class="hero-phase hero-phase--module" data-phase="1">
+      <div class="wrap hero-phase-inner">
+        <span class="hero-phase-tag">MÓDULO 01</span>
+        <h2 class="hero-phase-title">HTML &amp; CSS</h2>
+        <p class="hero-phase-desc">Estrutura e estilo de verdade — layouts responsivos que não quebram no celular do seu tio.</p>
       </div>
-      <div class="terminal-body" id="termBody"></div>
     </div>
+
+    <div class="hero-phase hero-phase--module" data-phase="2">
+      <div class="wrap hero-phase-inner">
+        <span class="hero-phase-tag">MÓDULO 02</span>
+        <h2 class="hero-phase-title">JavaScript</h2>
+        <p class="hero-phase-desc">Lógica, DOM e a base que separa quem só copia código de quem entende o que escreveu.</p>
+      </div>
+    </div>
+
+    <div class="hero-phase hero-phase--module" data-phase="3">
+      <div class="wrap hero-phase-inner">
+        <span class="hero-phase-tag">MÓDULO 03</span>
+        <h2 class="hero-phase-title">React</h2>
+        <p class="hero-phase-desc">Interfaces que escalam. Componentização, estado e os padrões que o mercado cobra.</p>
+      </div>
+    </div>
+
+    <div class="hero-phase hero-phase--module" data-phase="4">
+      <div class="wrap hero-phase-inner">
+        <span class="hero-phase-tag">MÓDULO 04</span>
+        <h2 class="hero-phase-title">Node.js</h2>
+        <p class="hero-phase-desc">Back-end, APIs e banco de dados — pra você entregar sistema completo, não só tela.</p>
+      </div>
+    </div>
+
+    <div class="hero-phase hero-phase--final" data-phase="5">
+      <div class="wrap hero-phase-inner">
+        <span class="hero-phase-tag">Sua vez</span>
+        <h2 class="hero-phase-title">Sua carreira também pode virar um "git commit -m 'nova profissão'".</h2>
+        <a href="#formacao" class="btn-primary">Ver a formação completa →</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll-hint" id="heroScrollHint" aria-hidden="true"><span></span>role para continuar</div>
   </div>
 </header>
 
-<section class="stats" style="padding:0;">
+<section class="stats">
   <div class="wrap">
     <div class="stat"><div class="stat-num">12.400<span class="u">+</span></div><div class="stat-label">alunos formados</div></div>
     <div class="stat"><div class="stat-num">95<span class="u">%</span></div><div class="stat-label">empregabilidade</div></div>
@@ -73,7 +127,12 @@
 </section>
 
 <!-- ===== QUEM SOMOS ===== -->
-<section id="quem-somos">
+<section id="quem-somos" class="has-video-bg">
+  <video class="bg-video" muted loop playsinline aria-hidden="true" preload="none" poster="./arquivos/cena-conserto_poster.jpg">
+    <source src="./arquivos/cena-conserto_web.webm" type="video/webm">
+    <source src="./arquivos/cena-conserto_web.mp4" type="video/mp4">
+  </video>
+  <div class="bg-video-overlay" aria-hidden="true"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <span class="kicker">Quem somos</span>
@@ -178,11 +237,12 @@
 </section>
 
 <!-- ===== PARA QUEM É ===== -->
-<section id="para-quem">
-  <video class="section-bg-video" autoplay muted loop playsinline aria-hidden="true">
-    <source src="./arquivos/Pippit_20260722_ProgEduBG.mp4" type="video/mp4">
+<section id="para-quem" class="has-video-bg">
+  <video class="bg-video" muted loop playsinline aria-hidden="true" preload="none" poster="./arquivos/Pippit_20260722_ProgEduBG_poster.jpg">
+    <source src="./arquivos/Pippit_20260722_ProgEduBG_web.webm" type="video/webm">
+    <source src="./arquivos/Pippit_20260722_ProgEduBG_web.mp4" type="video/mp4">
   </video>
-  <div class="section-video-overlay" aria-hidden="true"></div>
+  <div class="bg-video-overlay" aria-hidden="true"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <span class="kicker">Pra quem é</span>
@@ -209,11 +269,12 @@
 </section>
 
 <!-- ===== EQUIPE / AUTORIDADE ===== -->
-<section id="time">
-  <video class="team-bg-video" autoplay muted loop playsinline aria-hidden="true">
-    <source src="./arquivos/Pippit_0722_ProgrammingEdu.mp4" type="video/mp4">
+<section id="time" class="has-video-bg">
+  <video class="bg-video" muted loop playsinline aria-hidden="true" preload="none" poster="./arquivos/Pippit_0722_ProgrammingEdu_poster.jpg">
+    <source src="./arquivos/Pippit_0722_ProgrammingEdu_web.webm" type="video/webm">
+    <source src="./arquivos/Pippit_0722_ProgrammingEdu_web.mp4" type="video/mp4">
   </video>
-  <div class="team-video-overlay" aria-hidden="true"></div>
+  <div class="bg-video-overlay" aria-hidden="true"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <span class="kicker">Quem te ensina</span>
@@ -221,19 +282,19 @@
     </div>
     <div class="tutors reveal">
       <div class="tutor-card">
-        <div class="tutor-avatar"><img src="./arquivos/1.png" alt="Rodolfo Mori"></div>
+        <div class="tutor-avatar"><img src="./arquivos/1.webp" alt="Rodolfo Mori" width="264" height="264" loading="lazy"></div>
         <div class="tutor-name">Rodolfo Mori</div>
         <div class="tutor-role">Fundador &amp; instrutor principal</div>
         <div class="tutor-bio">Construiu a carreira em programação do zero e hoje lidera o time que constrói os próprios sistemas do DevClub — a mesma stack que você vai aprender.</div>
       </div>
       <div class="tutor-card">
-        <div class="tutor-avatar"><img src="./arquivos/2.png" alt="Andrey Maia"></div>
+        <div class="tutor-avatar"><img src="./arquivos/2.webp" alt="Andrey Maia" width="264" height="264" loading="lazy"></div>
         <div class="tutor-name">Andrey Maia</div>
         <div class="tutor-role">Head de suporte técnico</div>
         <div class="tutor-bio">Responde dúvida de aluno de manhã e sobe deploy à tarde. Cuida pra ninguém travar sozinho numa tela vermelha de erro.</div>
       </div>
       <div class="tutor-card">
-        <div class="tutor-avatar"><img src="./arquivos/3.png" alt="Fernanda Costa"></div>
+        <div class="tutor-avatar"><img src="./arquivos/3.webp" alt="Fernanda Costa" width="264" height="264" loading="lazy"></div>
         <div class="tutor-name">Fernanda Costa</div>
         <div class="tutor-role">Mentora de Carreira </div>
         <div class="tutor-bio">Guio profissionais no direcionamento de suas carreiras, no desenvolvimento de liderança e na conquista de novos objetivos profissionais. Transforme seu potencial em resultados concretos.</div>
@@ -243,13 +304,14 @@
 </section>
 
 <!-- ===== SALÁRIO / BENEFÍCIOS ===== -->
-<section id="salario">
-  <video class="salary-bg-video" autoplay muted loop playsinline aria-hidden="true">
-    <source src="./arquivos/Pippit_20260722_FuturisticTechBG.mp4" type="video/mp4">
+<section id="salario" class="has-video-bg">
+  <video class="bg-video" muted loop playsinline aria-hidden="true" preload="none" poster="./arquivos/Pippit_20260722_FuturisticTechBG_poster.jpg">
+    <source src="./arquivos/Pippit_20260722_FuturisticTechBG_web.webm" type="video/webm">
+    <source src="./arquivos/Pippit_20260722_FuturisticTechBG_web.mp4" type="video/mp4">
   </video>
-  <div class="salary-video-overlay" aria-hidden="true"></div>
+  <div class="bg-video-overlay" aria-hidden="true"></div>
   <div class="wrap salary-wrap">
-    <div class="section-head reveal" style="margin-bottom:40px;">
+    <div class="section-head reveal">
       <span class="kicker">Por que vale a pena</span>
       <h2>A média salarial de um dev no Brasil.</h2>
       <p class="section-sub">*Valores aproximados, variam por empresa, senioridade e região.</p>
@@ -279,7 +341,12 @@
 </section>
 
 <!-- ===== PROVA SOCIAL ===== -->
-<section id="alunos">
+<section id="alunos" class="has-video-bg">
+  <video class="bg-video" muted loop playsinline aria-hidden="true" preload="none" poster="./arquivos/cena-caixa_poster.jpg">
+    <source src="./arquivos/cena-caixa_web.webm" type="video/webm">
+    <source src="./arquivos/cena-caixa_web.mp4" type="video/mp4">
+  </video>
+  <div class="bg-video-overlay" aria-hidden="true"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <span class="kicker">Quem já era você</span>
@@ -290,19 +357,19 @@
       <div class="transform-row">
         <div class="t-before">ex-atendente de loja</div>
         <div class="t-arrow">→</div>
-        <div class="t-after"><span class="student-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;w=160&amp;h=160&amp;q=85" alt="Retrato ilustrativo de Camila" loading="lazy"></span><span>Camila R., Dev Front-end Jr.</span></div>
+        <div class="t-after"><span class="student-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;w=160&amp;h=160&amp;q=85" alt="Retrato ilustrativo de Camila" width="160" height="160" loading="lazy"></span><span class="student-name">Camila R., Dev Front-end Jr.</span></div>
         <div class="t-quote">"Estudava depois do fechamento do shopping. 5 meses depois, primeira CLT em tech."</div>
       </div>
       <div class="transform-row">
         <div class="t-before">ex-motorista de app</div>
         <div class="t-arrow">→</div>
-        <div class="t-after"><span class="student-avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&amp;fit=crop&amp;w=160&amp;h=160&amp;q=85" alt="Retrato ilustrativo de Bruno" loading="lazy"></span><span>Bruno T., Dev Full Stack</span></div>
+        <div class="t-after"><span class="student-avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&amp;fit=crop&amp;w=160&amp;h=160&amp;q=85" alt="Retrato ilustrativo de Bruno" width="160" height="160" loading="lazy"></span><span class="student-name">Bruno T., Dev Full Stack</span></div>
         <div class="t-quote">"Trocava corrida por commit. Hoje trabalho 100% remoto, de onde eu quiser."</div>
       </div>
       <div class="transform-row">
         <div class="t-before">ex-professora de artes</div>
         <div class="t-arrow">→</div>
-        <div class="t-after"><span class="student-avatar"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&amp;fit=crop&amp;w=160&amp;h=160&amp;q=85" alt="Retrato ilustrativo de Larissa" loading="lazy"></span><span>Larissa F., Dev Back-end</span></div>
+        <div class="t-after"><span class="student-avatar"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&amp;fit=crop&amp;w=160&amp;h=160&amp;q=85" alt="Retrato ilustrativo de Larissa" width="160" height="160" loading="lazy"></span><span class="student-name">Larissa F., Dev Back-end</span></div>
         <div class="t-quote">"Achei que era tarde pra mudar de área aos 34. Não era."</div>
       </div>
     </div>
@@ -317,14 +384,14 @@
     </div>
     <div class="stack-carousel companies-carousel reveal" aria-label="Empresas parceiras">
       <div class="stack-track" id="companiesTrack" tabindex="0">
-        <article class="stack-card company-card"><img src="./arquivos/nortex.png" alt="Escritório da Nortex Sistemas" loading="lazy"><div class="company-card-label">Nortex Sistemas</div></article>
-        <article class="stack-card company-card"><img src="./arquivos/vaza tech.png" alt="Escritório da Vaza Tech" loading="lazy"><div class="company-card-label">Vaza Tech</div></article>
-        <article class="stack-card company-card"><img src="./arquivos/cubo.png" alt="Escritório da Cubo Software" loading="lazy"><div class="company-card-label">Cubo Software</div></article>
-        <article class="stack-card company-card"><img src="./arquivos/plano b.png" alt="Escritório da Plano B Digital" loading="lazy"><div class="company-card-label">Plano B Digital</div></article>
-        <article class="stack-card company-card"><img src="./arquivos/rotamais.png" alt="Escritório da Rotamais" loading="lazy"><div class="company-card-label">Rotamais</div></article>
-        <article class="stack-card company-card"><img src="./arquivos/bytebank.png" alt="Escritório da Bytebank" loading="lazy"><div class="company-card-label">Bytebank</div></article>
-        <article class="stack-card company-card"><img src="./arquivos/firma.png" alt="Escritório da Firma.io" loading="lazy"><div class="company-card-label">Firma.io</div></article>
-        <article class="stack-card company-card"><img src="./arquivos/solventa.png" alt="Escritório da Solventa" loading="lazy"><div class="company-card-label">Solventa</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/nortex.webp" alt="Escritório da Nortex Sistemas" width="800" height="724" loading="lazy"><div class="company-card-label">Nortex Sistemas</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/vaza tech.webp" alt="Escritório da Vaza Tech" width="800" height="604" loading="lazy"><div class="company-card-label">Vaza Tech</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/cubo.webp" alt="Escritório da Cubo Software" width="800" height="600" loading="lazy"><div class="company-card-label">Cubo Software</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/plano b.webp" alt="Escritório da Plano B Digital" width="800" height="640" loading="lazy"><div class="company-card-label">Plano B Digital</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/rotamais.webp" alt="Escritório da Rotamais" width="800" height="640" loading="lazy"><div class="company-card-label">Rotamais</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/bytebank.webp" alt="Escritório da Bytebank" width="800" height="600" loading="lazy"><div class="company-card-label">Bytebank</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/firma.webp" alt="Escritório da Firma.io" width="800" height="640" loading="lazy"><div class="company-card-label">Firma.io</div></article>
+        <article class="stack-card company-card"><img src="./arquivos/solventa.webp" alt="Escritório da Solventa" width="800" height="640" loading="lazy"><div class="company-card-label">Solventa</div></article>
       </div>
       <div class="stack-carousel-footer">
         <span class="stack-counter" id="companiesCounter" aria-live="polite">01 / 08</span>
@@ -377,9 +444,14 @@
   </div>
 </section>
 
-<section class="cta-final" id="cta">
+<section class="cta-final has-video-bg" id="cta">
+  <video class="bg-video" muted loop playsinline aria-hidden="true" preload="none" poster="./arquivos/cena-rede_poster.jpg">
+    <source src="./arquivos/cena-rede_web.webm" type="video/webm">
+    <source src="./arquivos/cena-rede_web.mp4" type="video/mp4">
+  </video>
+  <div class="bg-video-overlay" aria-hidden="true"></div>
   <div class="wrap">
-    <span class="kicker" style="justify-content:center; display:flex;">Sua vez</span>
+    <span class="kicker">Sua vez</span>
     <h2>Sua carreira também pode virar um "git commit -m 'nova profissão'".</h2>
     <p class="sub2">As inscrições abrem em breve. Entra na lista e seja avisado antes de todo mundo.</p>
     <a href="#contato" class="btn-primary">Quero ser avisado →</a>
@@ -399,7 +471,7 @@
         <label>Nome<input type="text" name="nome" required></label>
         <label>E-mail<input type="email" name="email" required></label>
         <label>Mensagem<textarea name="mensagem" rows="4" required></textarea></label>
-        <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">Enviar mensagem</button>
+        <button type="submit" class="btn-primary">Enviar mensagem</button>
         <p class="contact-note" id="contactNote"></p>
       </form>
       <div class="contact-side">
@@ -451,5 +523,10 @@
 
 <script src="javascript/bg-animation.js" defer></script>
 <script src="javascript/script.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="javascript/hero-sequence.js" defer></script>
+<script src="javascript/alunos-emerge.js" defer></script>
 </body>
 </html>

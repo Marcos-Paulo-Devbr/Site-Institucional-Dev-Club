@@ -1,0 +1,26 @@
+/* Camada cinematográfica compartilhada pelas 7 páginas de exemplo (exemplos/*.html).
+   Injeta um fundo tecnológico atrás do .hero de cada página (via cinematic.js) e dá
+   o efeito de profundidade/tilt no mockup do projeto ao rolar a tela. */
+
+.hero-cinema-backdrop{
+  position:absolute;
+  inset:-15% -10% auto -10%;
+  height:135%;
+  z-index:-1;
+  background-image:url('img/capa-cinematica.webp');
+  background-size:cover;
+  background-position:center 35%;
+  opacity:.4;
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0%, black 22%, black 58%, transparent 94%);
+  mask-image:linear-gradient(to bottom, transparent 0%, black 22%, black 58%, transparent 94%);
+  pointer-events:none;
+  will-change:transform;
+}
+
+.preview-img, .preview{
+  transform-style:preserve-3d;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .hero-cinema-backdrop{ opacity:.28; }
+}

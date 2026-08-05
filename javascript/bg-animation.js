@@ -2,28 +2,33 @@
   const canvas = document.getElementById('bg-canvas');
   const ctx = canvas.getContext('2d');
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Rastro do cursor só faz sentido com mouse/trackpad de verdade — em touch,
+  // "mousemove" às vezes dispara sintético uma vez no toque e deixa um ponto
+  // fantasma parado na tela.
+  const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+  const trailEnabled = !prefersReduced && hasFinePointer;
 
   // paleta puxada direto do :root do styles.css do DevClub
   const CYAN     = [94, 234, 212];   // --cyan
   const CYAN_DIM = [35, 41, 55];     // --line
   const AMBER    = [255, 182, 39];   // --amber
 
-  // máscara 13x13 do emblema, extraída pixel a pixel da logo enviada.
+  // máscara 13x13 do emblema, extraída pixel a pixel da logo oficial.
   const MASK = [
-    '1110101110101',
-    '1010000000001',
-    '1110111111101',
-    '0000000000000',
-    '1011100011001',
-    '1010010100101',
-    '1010010100001',
-    '0010010100001',
-    '1011100011101',
-    '0000000000000',
-    '1000010010111',
-    '0100100100101',
-    '1001000010111',
-  ].map(row => row.split('').map(Number));
+    [1,1,1,0,1,0,1,1,1,0,1,0,1],
+    [1,0,1,0,0,0,0,0,0,0,0,0,1],
+    [1,1,1,0,1,1,1,1,1,1,1,0,1],
+    [0,0,0,0,0,0,0,0,0,0,0,1,0],
+    [1,0,1,1,1,0,0,0,1,1,0,0,1],
+    [1,0,1,0,0,1,0,1,0,0,1,0,1],
+    [1,0,1,0,0,1,0,1,0,0,0,0,1],
+    [0,0,1,0,0,1,0,1,0,0,0,0,1],
+    [1,0,1,1,1,0,0,0,1,1,1,0,1],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [1,0,0,0,0,1,0,0,1,0,1,1,1],
+    [0,1,0,0,1,0,0,1,0,0,1,0,1],
+    [1,0,0,1,0,0,0,0,1,0,1,1,1],
+  ];
 
   let W,H,DPR;
   let ambient = [];
@@ -34,12 +39,83 @@
   let streams = [];
   let scrollY = 0, targetScrollY = 0;
   let mouseX=-9999, mouseY=-9999;
+
+  // Siglas reais dos módulos da formação (mesmos nomes de #formacao), na
+  // ordem em que aparecem lá — surgem uma de cada vez conforme o mouse anda,
+  // tipo "puxando" cada tecnologia do rastro.
+  const TECH_TAGS = ['HTML','CSS','JS','React','Node','SQL','Git','API'];
+  let techLabels = [];
+  let lastLabelPos = null;
+  let techIndex = 0;
+  const LABEL_MIN_DIST = 110; // px percorridos entre uma sigla e a próxima
+  const LABEL_MAX_AGE = 2600; // ms — crescimento e leitura bem mais lentos
+  const LABEL_MAX_COUNT = 4; // poucos nós "imantados" por vez, tipo a referência
   let quemSomosTop = 0; // posição (em coords de documento) onde a fase 1 termina
 
+  // ---- emblema remonta uma 2ª vez, agora no canto direito, ancorado em
+  // #formacao — o alvo fica em coordenadas de documento (por isso não é
+  // recalculado a cada frame) e vira tela subtraindo scrollY no draw().
+  let formacaoTop = 0;
+  let formacaoAnchorDoc = { x:0, y:0, size:0 };
+  let formacaoLogoPixels = [];
+
+  function updateFormacaoAnchor(){
+    const el = document.getElementById('formacao');
+    if(!el){ formacaoAnchorDoc = {x:0,y:0,size:0}; formacaoTop = H*4; return; }
+    const rect = el.getBoundingClientRect();
+    const docTop = rect.top + window.scrollY;
+    const size = Math.min(200, W*0.16, H*0.24);
+    const cx = W - size*0.75 - 24;
+    const cy = docTop + Math.min(300, rect.height*0.22);
+    formacaoAnchorDoc = { x: cx-size/2, y: cy-size/2, size };
+    formacaoTop = docTop;
+  }
+
+  function buildFormacaoLogoPixels(){
+    const anchor = formacaoAnchorDoc;
+    const rows=MASK.length, cols=MASK[0].length, cell=anchor.size/cols;
+    const cells=[]; for(let y=0;y<rows;y++) for(let x=0;x<cols;x++) if(MASK[y][x]) cells.push({x,y});
+    const order = cells.map((_,i)=>i);
+    for(let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
+    formacaoLogoPixels = cells.map((c,i)=>({
+      targetDoc:{x:anchor.x+c.x*cell+cell/2, y:anchor.y+c.y*cell+cell/2},
+      home:{x:Math.random()*W, y:Math.random()*H*2-H*0.5},
+      ctrl:{x:(Math.random()-0.5)*220, y:(Math.random()-0.5)*220},
+      delay: order.indexOf(i)/cells.length, size:cell*0.74,
+      locked:false,
+    }));
+  }
+
   // ---- fase 1: emblema se monta aqui, ancorado dentro do hero ----
-  function logoAnchor(){
+  // A âncora é cacheada: draw() a consulta a cada frame e medir o layout
+  // (getBoundingClientRect) 60x por segundo custaria reflow à toa.
+  let anchorRect = { x:0, y:0, size:0 };
+  function logoAnchor(){ return anchorRect; }
+
+  function updateAnchor(){
     const size = Math.min(220, W*0.18, H*0.28);
-    return { x: W*0.74 - size/2, y: H*0.36 - size/2, size };
+    let cx, cy;
+    if(W > 900){
+      // hero em 2 colunas: o .terminal ocupa a direita, então o emblema
+      // centraliza na coluna esquerda do .hero-grid (medida no DOM).
+      const col = document.querySelector('.hero-grid > div');
+      const rect = col && col.getBoundingClientRect();
+      cx = (rect && rect.width) ? rect.left + rect.width/2 : W*0.3;
+      cy = H*0.36;
+    } else if(W > 560){
+      // ainda 2 colunas, mas apertadas: mantém à direita. H*0.28 é o teto,
+      // mas nessa faixa o .terminal sobe mais rápido que a fração conforme
+      // a largura encolhe, então mede o topo real e sobe mais se precisar
+      // (com uma margem) pra nunca encostar nele.
+      cx = W*0.74;
+      const term = document.querySelector('.terminal');
+      const termTop = term ? term.getBoundingClientRect().top : Infinity;
+      cy = Math.min(H*0.28, termTop - 24 - size/2);
+    } else {
+      // coluna única: o terminal desce para baixo do texto e o topo sobra.
+      cx = W*0.5; cy = H*0.22;
+    }
+    anchorRect = { x: cx - size/2, y: cy - size/2, size };
   }
 
   function findPhaseBoundary(){
@@ -52,17 +128,34 @@
     }
   }
 
+  let lastW = -1;
   function resize(){
-    DPR = Math.min(window.devicePixelRatio||1, 2);
+    const widthChanged = window.innerWidth !== lastW;
+    DPR = Math.min(window.devicePixelRatio||1, 1.5);
     W = window.innerWidth; H = window.innerHeight;
+    lastW = W;
     canvas.width = W*DPR; canvas.height = H*DPR;
     canvas.style.width = W+'px'; canvas.style.height = H+'px';
     ctx.setTransform(DPR,0,0,DPR,0,0);
     findPhaseBoundary();
-    buildAmbient();
-    buildComets();
-    buildLogoPixels();
-    buildStreams();
+    updateAnchor();
+    updateFormacaoAnchor();
+    // Só a largura reconstrói as partículas. No mobile a barra de endereço
+    // some/aparece e dispara resize só de altura: reconstruir ali faria o
+    // emblema se desmontar e remontar no meio da rolagem.
+    if(widthChanged){
+      buildAmbient();
+      buildComets();
+      buildLogoPixels();
+      buildFormacaoLogoPixels();
+      buildStreams();
+    }
+  }
+
+  let resizeTimer = null;
+  function onResize(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 200);
   }
 
   function buildAmbient(){
@@ -104,7 +197,7 @@
       home:{x:Math.random()*W, y:Math.random()*H*2-H*0.5},
       ctrl:{x:(Math.random()-0.5)*260, y:(Math.random()-0.5)*260},
       delay: order.indexOf(i)/cells.length, size:cell*0.74,
-      wobblePhase:Math.random()*Math.PI*2, locked:false,
+      locked:false,
     }));
   }
 
@@ -125,8 +218,20 @@
   }
 
   function onScroll(){ targetScrollY = window.scrollY; }
-  function onMouse(e){ mouseX=e.clientX; mouseY=e.clientY; }
-  function onLeave(){ mouseX=-9999; mouseY=-9999; }
+  function onMouse(e){
+    mouseX=e.clientX; mouseY=e.clientY;
+    if(trailEnabled){
+      if(!lastLabelPos || Math.hypot(mouseX-lastLabelPos.x, mouseY-lastLabelPos.y) > LABEL_MIN_DIST){
+        // fica parada onde nasceu — o "ímã" é a linha até o cursor atual,
+        // que vai esticando conforme o mouse se afasta.
+        techLabels.push({text:TECH_TAGS[techIndex % TECH_TAGS.length], x:mouseX, y:mouseY, t:performance.now()});
+        if(techLabels.length>LABEL_MAX_COUNT) techLabels.shift();
+        techIndex++;
+        lastLabelPos = {x:mouseX, y:mouseY};
+      }
+    }
+  }
+  function onLeave(){ mouseX=-9999; mouseY=-9999; techLabels.length=0; lastLabelPos=null; }
   function onNavPulse(e){
     if(prefersReduced) return;
     const {x,y} = e.detail;
@@ -140,9 +245,13 @@
   }
 
   let t = 0, lastTime = performance.now();
+  let rafId = null;
   function draw(now){
     const dt = Math.min(0.05,(now-lastTime)/1000); lastTime = now; t += dt;
-    scrollY += (targetScrollY - scrollY) * 0.08;
+    // 0.08 foi calibrado a 60fps (dt≈1/60s); normalizado por dt pra não
+    // convergir mais rápido em telas de taxa de atualização mais alta
+    // (a 144Hz reagia ~2,4x mais rápido que o pretendido).
+    scrollY += (targetScrollY - scrollY) * (1 - Math.pow(1 - 0.08, dt*60));
 
     // progresso da montagem: termina um pouco antes do topo de #quem-somos
     const assembleEnd = Math.max(200, quemSomosTop - H*0.1);
@@ -153,6 +262,12 @@
     const phase2 = smoothstep(quemSomosTop - H*0.35, quemSomosTop + H*0.15, scrollY);
     const phase1 = 1 - phase2;
 
+    // progresso da 2ª montagem do emblema, agora disparada pela chegada em
+    // #formacao. Usa a posição real da âncora (não o topo da seção — ela é
+    // ancorada mais abaixo, perto dos cards), senão a montagem terminava
+    // depois que o alvo já tinha saído da tela por cima.
+    const formacaoProgress = smoothstep(formacaoAnchorDoc.y - H*0.75, formacaoAnchorDoc.y - H*0.15, scrollY);
+
     ctx.clearRect(0,0,W,H);
 
     // Ondas disparadas pelos botões de navegação: continuam vivas no canvas,
@@ -160,9 +275,10 @@
     navPulses = navPulses.filter(p => p.age < 1.5);
     navPulses.forEach(p => {
       p.age += dt;
-      const progress = p.age / 1.5;
-      const radius = 12 + progress * Math.max(W, H) * .42;
-      ctx.strokeStyle = `rgba(${CYAN[0]},${CYAN[1]},${CYAN[2]},${(1-progress)*.18})`;
+      // nome próprio pra não sombrear o "progress" de montagem do emblema, acima.
+      const pulseProgress = p.age / 1.5;
+      const radius = 12 + pulseProgress * Math.max(W, H) * .42;
+      ctx.strokeStyle = `rgba(${CYAN[0]},${CYAN[1]},${CYAN[2]},${(1-pulseProgress)*.18})`;
       ctx.lineWidth = 1.2;
       ctx.beginPath(); ctx.arc(p.x, p.y, radius, 0, Math.PI * 2); ctx.stroke();
     });
@@ -216,7 +332,6 @@
         });
       }
 
-      const anchor = logoAnchor();
       logoPixels.forEach(p => {
         const raw=(progress-p.delay*0.55)/(1-p.delay*0.55);
         const local=smooth(raw);
@@ -271,25 +386,142 @@
         ctx.fillRect(0,0,W,H);
       }
 
-      // emblema permanece como marca-d'água discreta na fase 2
-      const anchor = logoAnchor();
-      const rows=MASK.length, cols=MASK[0].length, cell=anchor.size/cols;
-      ctx.fillStyle = `rgba(${CYAN[0]},${CYAN[1]},${CYAN[2]},${0.10*phase2})`;
-      for(let y=0;y<rows;y++) for(let x=0;x<cols;x++) if(MASK[y][x]){
-        ctx.fillRect(anchor.x+x*cell+1, anchor.y+y*cell+1, cell-2, cell-2);
+      // emblema remonta pela 2ª vez no canto direito, ancorado em #formacao —
+      // mesma lógica de "voa da posição aleatória até o alvo" do hero, só que
+      // o alvo acompanha o scroll (é a posição real da seção, não fixa na tela).
+      if(formacaoProgress > 0.001){
+        formacaoLogoPixels.forEach(p => {
+          const raw=(formacaoProgress-p.delay*0.55)/(1-p.delay*0.55);
+          const local=smooth(raw);
+          const eased = raw<=0?0:raw>=1?1:easeOutBack(Math.min(1,raw));
+          const targetX = p.targetDoc.x, targetY = p.targetDoc.y - scrollY;
+          const bx=p.home.x+(targetX-p.home.x)*eased;
+          const by=p.home.y+(targetY-p.home.y)*eased;
+          const arc=(1-local);
+          const x=bx+p.ctrl.x*arc*Math.sin(local*Math.PI);
+          const y=by+p.ctrl.y*arc*Math.sin(local*Math.PI);
+          if(y<-40||y>H+40) return;
+
+          const dx=x-mouseX, dy=y-mouseY;
+          const near=Math.max(0,1-Math.hypot(dx,dy)/120);
+          const size=(p.size*(0.55+local*0.55)+near*3);
+          const color = local<0.97 ? CYAN_DIM : CYAN;
+          const [r,g,b]=color;
+          const alpha=(0.4+local*0.55+near*0.25)*phase2;
+          if(local>0.9){ ctx.shadowColor=`rgba(${r},${g},${b},${0.7*phase2})`; ctx.shadowBlur=7; }
+          ctx.fillStyle=`rgba(${r},${g},${b},${Math.min(alpha,1)})`;
+          ctx.fillRect(x-size/2,y-size/2,size,size);
+          ctx.shadowBlur=0;
+        });
       }
     }
 
-    requestAnimationFrame(draw);
+    // ===== Cursor: só linhas fininhas de conexão, sem rastro/malha grosso =====
+    if(trailEnabled && mouseX>-9999){
+      const now = performance.now();
+
+      // liga às partículas de fundo próximas do cursor, mesmo tom —
+      // sensação de "escanear" a poeira, reforçando a leitura de circuito.
+      const nearLayer = ambient[1];
+      if(nearLayer){
+        const offsetY = scrollY*nearLayer.speed;
+        let links=0;
+        for(const d of nearLayer.dots){
+          if(links>=6) break;
+          const py=((d.y-offsetY)%(H*3)+H*3)%(H*3)-H;
+          const dx=d.x-mouseX, dy=py-mouseY, dist=Math.hypot(dx,dy);
+          if(dist<140){
+            links++;
+            const alpha=(1-dist/140)*0.35;
+            ctx.strokeStyle=`rgba(${CYAN[0]},${CYAN[1]},${CYAN[2]},${alpha})`;
+            ctx.lineWidth=1;
+            ctx.beginPath(); ctx.moveTo(mouseX,mouseY); ctx.lineTo(d.x,py); ctx.stroke();
+            ctx.fillStyle=`rgba(${CYAN[0]},${CYAN[1]},${CYAN[2]},${alpha+0.3})`;
+            ctx.beginPath(); ctx.arc(d.x,py,2,0,Math.PI*2); ctx.fill();
+          }
+        }
+      }
+
+      // nó do cursor: um pontinho simples marcando a posição
+      ctx.shadowColor=`rgba(${CYAN[0]},${CYAN[1]},${CYAN[2]},0.9)`;
+      ctx.shadowBlur=10;
+      ctx.fillStyle=`rgba(${CYAN[0]},${CYAN[1]},${CYAN[2]},0.95)`;
+      ctx.beginPath(); ctx.arc(mouseX,mouseY,2.6,0,Math.PI*2); ctx.fill();
+      ctx.shadowBlur=0;
+
+      // siglas das tecnologias: cada uma fica parada onde nasceu e vira uma
+      // bolinha que cresce bem devagar, presa ao cursor por uma linha — tipo
+      // um ímã puxando aquele ponto enquanto o mouse se afasta.
+      techLabels = techLabels.filter(l => now-l.t < LABEL_MAX_AGE);
+      techLabels.forEach(l => {
+        const age = (now-l.t)/LABEL_MAX_AGE;
+        let alpha;
+        if(age<0.08) alpha = age/0.08;
+        else if(age>0.78) alpha = Math.max(0, 1-(age-0.78)/0.22);
+        else alpha = 1;
+
+        const growP = Math.min(1, age/0.7);
+        const eased = 1-Math.pow(1-growP,3);
+        const targetR = 17;
+        const r = 2 + eased*(targetR-2);
+
+        const dist = Math.hypot(l.x-mouseX, l.y-mouseY);
+        if(dist>4){
+          const grad = ctx.createLinearGradient(mouseX,mouseY,l.x,l.y);
+          grad.addColorStop(0, `rgba(${CYAN[0]},${CYAN[1]},${CYAN[2]},${alpha*0.45})`);
+          grad.addColorStop(1, `rgba(${CYAN[0]},${CYAN[1]},${CYAN[2]},${alpha*0.12})`);
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(mouseX,mouseY); ctx.lineTo(l.x,l.y); ctx.stroke();
+        }
+
+        ctx.shadowColor=`rgba(${CYAN[0]},${CYAN[1]},${CYAN[2]},${alpha*0.7})`;
+        ctx.shadowBlur=10;
+        ctx.fillStyle=`rgba(11,14,20,${alpha*0.75})`;
+        ctx.beginPath(); ctx.arc(l.x,l.y,r,0,Math.PI*2); ctx.fill();
+        ctx.shadowBlur=0;
+        ctx.strokeStyle=`rgba(${CYAN[0]},${CYAN[1]},${CYAN[2]},${alpha*0.8})`;
+        ctx.lineWidth=1.3;
+        ctx.beginPath(); ctx.arc(l.x,l.y,r,0,Math.PI*2); ctx.stroke();
+
+        if(r>10){
+          const textAlpha = Math.min(1,(r-10)/6)*alpha;
+          const fontSize = l.text.length<=3 ? 10 : l.text.length<=4 ? 9 : 7.5;
+          ctx.font = `700 ${fontSize}px "JetBrains Mono", monospace`;
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillStyle=`rgba(${CYAN[0]},${CYAN[1]},${CYAN[2]},${textAlpha})`;
+          ctx.fillText(l.text, l.x, l.y+0.5);
+        }
+      });
+    }
+
+    rafId = requestAnimationFrame(draw);
   }
 
-  window.addEventListener('resize', resize);
+  // Com a aba em segundo plano não tem por que gastar CPU/GPU redesenhando
+  // o canvas — cancela o loop e só reagenda quando ela volta a ficar visível.
+  document.addEventListener('visibilitychange', () => {
+    if(document.hidden){
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    } else if(rafId === null){
+      rafId = requestAnimationFrame(draw);
+    }
+  });
+
+  window.addEventListener('resize', onResize);
   window.addEventListener('scroll', onScroll, {passive:true});
   window.addEventListener('mousemove', onMouse);
   window.addEventListener('mouseleave', onLeave);
   window.addEventListener('nav-pulse', onNavPulse);
 
-  window.addEventListener('load', findPhaseBoundary);
+  // no load o layout já assentou: remede a coluna do hero. A página ainda
+  // está no topo (progress ~0), então reposicionar os alvos aqui é invisível.
+  window.addEventListener('load', () => {
+    resize();          // canvas e âncora com as medidas finais do layout
+    buildLogoPixels(); // alvos na coluna do hero já medida
+    buildFormacaoLogoPixels(); // idem, agora ancorado em #formacao
+  });
   resize();
-  requestAnimationFrame(draw);
+  rafId = requestAnimationFrame(draw);
 })();
